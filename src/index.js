@@ -1,7 +1,8 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
+import 'antd/dist/antd.css';
 import './index.css';
-import App from './App';
+import App from './components/App';
 import { Provider } from 'react-redux';
 import configureStore from './store/ConfigureStore'
 import * as serviceWorker from './serviceWorker';
@@ -10,7 +11,7 @@ import { filtersActions } from './actions/Filters'
 
 const store = configureStore();
 
-store.dispatch(filtersActions.getFiltersNames());
+store.dispatch(filtersActions.getContexts());
 
 ReactDOM.render(
     <Provider store={store}>

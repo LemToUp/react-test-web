@@ -1,11 +1,11 @@
 export const filtersService = {
-    getFilterNamesList,
+    getContextsList,
 };
 
-function getFilterNamesList() {
+function getContextsList() {
     return new Promise(resolve => {
         return setTimeout(() => {
-            return resolve(import ('../data/tables'));
+            return resolve(import ('../data/contexts'));
         }, 200);
     });
 }

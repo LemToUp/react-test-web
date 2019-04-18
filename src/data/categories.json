@@ -1,0 +1,52 @@
+[
+  {
+    "id" : 1,
+    "name" : "Dim1",
+    "section_id": 1
+  },
+  {
+    "id" : 2,
+    "name" : "Dim2",
+    "section_id": 1
+  },
+  {
+    "id" : 3,
+    "name" : "Dim3",
+    "section_id": 1
+  },
+  {
+    "id" : 4,
+    "name" : "Dim4",
+    "section_id": 1
+  },
+  {
+    "id" : 5,
+    "name" : "Dim5",
+    "section_id": 1
+  },
+  {
+    "id" : 6,
+    "name" : "Dim6",
+    "section_id": 1
+  },
+  {
+    "id" : 7,
+    "name" : "Dim7",
+    "section_id": 1
+  },
+  {
+    "id" : 8,
+    "name" : "Site",
+    "section_id": 2
+  },
+  {
+    "id" : 9,
+    "name" : "Brand",
+    "section_id": 2
+  },
+  {
+    "id" : 10,
+    "name" : "Format",
+    "section_id": 2
+  }
+]
