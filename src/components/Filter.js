@@ -1,5 +1,5 @@
 import React, {useState, useEffect} from 'react';
-import '../styles/Filter.css';
+import '../styles/Filter.scss';
 import { Icon } from 'antd';
 import DropDownFilterSection from './DropDownFilterSection';
 import { connect } from 'react-redux';
@@ -63,7 +63,7 @@ function Filter(props) {
                 </div>
                 <div className="Filter-modal-body">
                     <DropDownFilterSection title="CONTEXTS" onSelect={onSelectContexts} data={props.contexts}/>
-                    <DropDownFilterSection title="DIMENTIONS" onSelect={onSelectDimentions} data={{}}/>
+                    <DropDownFilterSection title="DIMENTIONS" onSelect={onSelectDimentions} data={[]}/>
 
                     <div className="Filter-modal-body-section">
 

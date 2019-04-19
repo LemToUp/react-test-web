@@ -1,6 +1,5 @@
 import React, {useState} from 'react';
-import { Button } from 'antd';
-import '../styles/WidgetPanel.css';
+import '../styles/WidgetPanel.scss';
 import Filter from './Filter'
 
 export default function WidgetPanel() {
@@ -11,7 +10,9 @@ export default function WidgetPanel() {
     };
     return (
         <section className="Widget-panel" >
-            <Button className="Widget-button" shape="circle" icon={isFilterShow ? "menu-fold" : "menu-unfold"} onClick={onToggleFilter}/>
+            <i className="material-icons" onClick={onToggleFilter}>
+                {isFilterShow ? 'format_indent_decrease' : 'format_indent_increase'}
+            </i>
             {isFilterShow ? <Filter closeEvent={onToggleFilter}/> : undefined}
         </section>
     );

@@ -1,0 +1,47 @@
+@import './_colors.scss';
+
+.Drop-down-section {
+  flex: 1;
+  justify-content: right;
+  text-align: left;
+  padding: 5px;
+  font-size: 0.7em;
+  background-color: $filter-dark-color;
+  border-bottom: 1px solid #c9c9c9;
+
+  i {
+    font-size: 0.6em;
+    font-weight: bold;
+    padding: 5px;
+    cursor: pointer;
+  }
+
+  span {
+    font-weight: bold;
+  }
+}
+
+.Drop-down-modal {
+  box-sizing: border-box;
+  line-height: 1.5;
+  margin: 0 auto;
+  font-size: calc(4px + 2vmin);
+  background-color: $filter-dark-color;
+  color: #fff;
+  position: fixed;
+  z-index: 1000;
+
+  ul {
+    border-top: 5px solid $color-react-blue;
+    font-size: 16px;
+    min-width: 100px;
+    list-style: none;
+    li {
+      padding-right: 30px;
+
+      input {
+        margin: 0 10px 0 5px;
+      }
+    }
+  }
+}

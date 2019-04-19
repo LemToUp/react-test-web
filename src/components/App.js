@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import logo from '../logo.svg';
-import '../styles/App.css';
+import 'bootstrap/dist/css/bootstrap.css';
+import '../styles/App.scss';
 import WidgetPanel from './WidgetPanel'
 
 class App extends Component {
