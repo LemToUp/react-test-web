@@ -1,5 +1,4 @@
 import React, {useState, useEffect} from 'react';
-import {Icon} from 'antd';
 import '../styles/DropDownFilterSection.scss';
 
 function DropDownFilterSection(props) {
@@ -24,7 +23,11 @@ function DropDownFilterSection(props) {
                 {data.map((item, i) => (
                 <li key={`li_${uniqueId}_${i}`}>
                     <div className="checkbox">
-                        <label htmlFor={`${uniqueId}_${i}`} key={`label_${uniqueId}_${i}`}>
+                        <label
+                            htmlFor={`${uniqueId}_${i}`}
+                            key={`label_${uniqueId}_${i}`}
+                            className="pointer"
+                        >
                             <input
                                 type="checkbox"
                                 id={`${uniqueId}_${i}`}
@@ -43,7 +46,8 @@ function DropDownFilterSection(props) {
 
     return (
         <div className="Drop-down-section">
-            <Icon type={isDropDownShow ? 'up' : 'down'} onClick={toggleDropDown}/><span>{props.title}</span>
+            <i className="material-icons pointer" onClick={toggleDropDown}>{isDropDownShow ? 'expand_less' : 'expand_more'}</i>
+            <span>{props.title}</span>
             <div className={`Drop-down-modal ${!isDropDownShow ? 'd-none' : ''}`}>
                 {renderList(props.data)}
             </div>

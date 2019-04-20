@@ -1,6 +1,5 @@
 import React, {useState, useEffect} from 'react';
 import '../styles/Filter.scss';
-import { Icon } from 'antd';
 import DropDownFilterSection from './DropDownFilterSection';
 import { connect } from 'react-redux';
 
@@ -57,9 +56,9 @@ function Filter(props) {
         <div className="Filter-modal-wrapper">
             <div className="Filter-modal" style={styles}>
                 <div className="Filter-modal-header">
-                    <Icon className="Filter-drag-icon" type="drag" onMouseDown={onMouseDown}/>
+                    <i className="material-icons pointer" onMouseDown={onMouseDown}>drag_indicator</i>
                     <span>FILTERS</span>
-                    <span className="Filter-close-icon"><Icon onClick={onClose} type="close"/></span>
+                    <span className="Filter-close-icon"><i className="material-icons pointer" onClick={onClose}>close</i></span>
                 </div>
                 <div className="Filter-modal-body">
                     <DropDownFilterSection title="CONTEXTS" onSelect={onSelectContexts} data={props.contexts}/>

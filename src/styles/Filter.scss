@@ -32,20 +32,10 @@
   display: flex;
   flex: 1;
   align-items: center;
-  justify-content: left;
+  justify-content: space-between;
 
   span {
     flex: 0.6;
-  }
-
-  .Filter-drag-icon {
-    flex: 0.2;
-    cursor: pointer;
-    transition: 0.3s;
-  }
-
-  .Filter-drag-icon:hover {
-    transition: 0.3s;
   }
 
   .Filter-close-icon {

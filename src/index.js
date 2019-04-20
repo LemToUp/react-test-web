@@ -5,6 +5,7 @@ import App from './components/App';
 import { Provider } from 'react-redux';
 import configureStore from './store/ConfigureStore'
 import * as serviceWorker from './serviceWorker';
+import './styles/common.scss'
 
 import { filtersActions } from './actions/Filters'
 

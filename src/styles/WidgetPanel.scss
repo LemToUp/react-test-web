@@ -8,19 +8,6 @@
   flex-basis: 33%;
   border-left: 5px solid $color-react-blue;
   color: #000;
-   i {
-     background-color: $color-react-blue;
-     color: #fff;
-     border-radius: 25px;
-     padding: 5px;
-     cursor: pointer;
-     transition: 0.3s;
-   }
-
-  i:hover {
-    background-color: #fff;
-    color: $color-react-blue;
-  }
 }
 
 .Widget-button {

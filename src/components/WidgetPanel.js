@@ -10,7 +10,7 @@ export default function WidgetPanel() {
     };
     return (
         <section className="Widget-panel" >
-            <i className="material-icons" onClick={onToggleFilter}>
+            <i className="material-icons btn-circle" onClick={onToggleFilter}>
                 {isFilterShow ? 'format_indent_decrease' : 'format_indent_increase'}
             </i>
             {isFilterShow ? <Filter closeEvent={onToggleFilter}/> : undefined}
