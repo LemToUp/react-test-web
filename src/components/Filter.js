@@ -2,6 +2,8 @@ import React, {useState, useEffect} from 'react';
 import '../styles/Filter.scss';
 import DropDownFilterSection from './DropDownFilterSection';
 import { connect } from 'react-redux';
+import configureStore from '../store/ConfigureStore'
+import {filtersActions} from '../actions/Filters';
 
 function Filter(props) {
     const onClose = (e) => {
@@ -10,6 +12,7 @@ function Filter(props) {
 
     const [styles, changeStyles] = useState({});
     const [isDraggable, changeDraggableState] = useState(false);
+    const [dimentions, setDimentions] = useState([]);
 
     useEffect(() => { //Subscribe on mount
         window.addEventListener('mouseup', onMouseUp);
@@ -46,6 +49,7 @@ function Filter(props) {
 
     let onSelectContexts = (ids) => {
         debugger;
+        configureStore.dispatch(filtersActions.getDimentions(ids));
     };
 
     let onSelectDimentions = (ids) => {
@@ -61,8 +65,16 @@ function Filter(props) {
                     <span className="Filter-close-icon"><i className="material-icons pointer" onClick={onClose}>close</i></span>
                 </div>
                 <div className="Filter-modal-body">
-                    <DropDownFilterSection title="CONTEXTS" onSelect={onSelectContexts} data={props.contexts}/>
-                    <DropDownFilterSection title="DIMENTIONS" onSelect={onSelectDimentions} data={[]}/>
+                    <DropDownFilterSection
+                        title="CONTEXTS"
+                        onCloseList={onSelectContexts}
+                        data={props.contexts}
+                    />
+                    <DropDownFilterSection
+                        title="DIMENTIONS"
+                        onCloseList={onSelectDimentions}
+                        data={dimentions}
+                    />
 
                     <div className="Filter-modal-body-section">
 
@@ -74,9 +86,10 @@ function Filter(props) {
 }
 
 function mapStateToProps(state) {
-    const { contexts } = state.filters;
+    const { contexts, dimentions } = state.filters;
     return {
-        contexts
+        contexts,
+        dimentions
     }
 }
 
