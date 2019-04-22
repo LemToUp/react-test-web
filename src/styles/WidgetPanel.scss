@@ -8,10 +8,22 @@
   flex-basis: 33%;
   border-left: 5px solid $color-react-blue;
   color: #000;
+  display: flex;
 }
 
 .Widget-button {
-  background-color: $color-react-blue;
-  color: #fff;
-  border-radius: 25px;
+  flex: 0.2;
+}
+
+.Widget-list {
+  flex: 0.8;
+  padding: 0 0 0 10px;
+  ul {
+    font-size: 15px;
+    background-color: #fff;
+    list-style: none;
+    margin: 0 0 0 10px;
+    padding: 5px;
+    border-radius: 10px;
+  }
 }

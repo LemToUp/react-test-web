@@ -1,18 +1,24 @@
-import React, {useState, useEffect} from 'react';
+import React, {useState, useEffect, useCallback, useMemo} from 'react';
 import '../styles/Filter.scss';
 import DropDownFilterSection from './DropDownFilterSection';
+import SearchFilterSection from './SearchFilterSection';
+import ContentFilterSection from './ContentFilterSection';
 import { connect } from 'react-redux';
-import {filtersActions} from '../actions/Filters';
+import { filtersActions } from '../actions/Filters';
 
 function Filter(props) {
     const onClose = (e) => {
         props.closeEvent(e);
     };
 
-    const [styles, changeStyles] = useState({});
-    const [isDraggable, changeDraggableState] = useState(false);
-    const [isContextListDisplaying, changeIsContextListDisplaying] = useState(false);
-    const [isDimentionsListDisplaying, changeIsDimentionsListDisplaying] = useState(false);
+    const [styles, setStyles] = useState({});
+    const [isDraggable, setDraggableState] = useState(false);
+    const [isContextListDisplaying, setIsContextListDisplaying] = useState(false);
+    const [isDimentionsListDisplaying, setIsDimentionsListDisplaying] = useState(false);
+
+    const [contextState, setContextState] = useState(new Set());
+    const [dimentionsState, setDimentionsState] = useState(new Set());
+    const [filtersState, setFiltersState] = useState(new Set());
 
     useEffect(() => { //Subscribe on mount
         window.addEventListener('mouseup', onMouseUp);
@@ -25,21 +31,21 @@ function Filter(props) {
 
     const onMouseUp = (e) => {
         if (isDraggable) {
-            changeDraggableState(false);
+            setDraggableState(false);
         }
         e.stopPropagation();
     };
 
     const onMouseDown = (e) => {
         if (!isDraggable) {
-            changeDraggableState(true);
+            setDraggableState(true);
         }
         e.stopPropagation();
     };
 
     const onMouseMove = (e) => {
         if (isDraggable) {
-            changeStyles({
+            setStyles({
                 top: `${e.clientY - 10}px`,
                 left: `${e.clientX - 10}px`
             });
@@ -48,31 +54,39 @@ function Filter(props) {
     };
 
     const closeAllLists = () => {
-        changeIsContextListDisplaying(false);
-        changeIsDimentionsListDisplaying(false);
+        setIsContextListDisplaying(false);
+        setIsDimentionsListDisplaying(false);
     };
 
     const onToggleContexts = () => {
         if (!isContextListDisplaying) {
             closeAllLists();
         }
-        changeIsContextListDisplaying(!isContextListDisplaying);
-
+        setIsContextListDisplaying(!isContextListDisplaying);
     };
 
     const onGetContexts = (ids) => {
-        props.dispatch(filtersActions.getDimentions(ids));
+        setContextState(ids);
+        props.dispatch(filtersActions.getDimentions([...ids]));
     };
 
     const onToggleDimentions = () => {
         if (!isDimentionsListDisplaying) {
             closeAllLists();
         }
-        changeIsDimentionsListDisplaying(!isDimentionsListDisplaying);
+        setIsDimentionsListDisplaying(!isDimentionsListDisplaying);
     };
 
     const onGetDimentions = (ids) => {
-        props.dispatch(filtersActions.getFilters(ids));
+        setDimentionsState(ids);
+        props.dispatch(filtersActions.getFilters([...ids]));
+    };
+
+    const onGetFilters = (ids) => {
+        setFiltersState(ids);
+        if (props.onGetData) {
+            props.onGetData([...ids]);
+        }
     };
 
     return (
@@ -87,7 +101,7 @@ function Filter(props) {
                     <DropDownFilterSection
                         title="CONTEXTS"
                         onToggleList={onToggleContexts}
-                        onSendCheckedData={onGetContexts}
+                        onSendCheckedData={onGetContexts.bind(this)}
                         data={props.contexts}
                         isDisplaying={isContextListDisplaying}
                     />
@@ -98,10 +112,11 @@ function Filter(props) {
                         data={props.dimentions}
                         isDisplaying={isDimentionsListDisplaying}
                     />
-
-                    <div className="Filter-modal-body-section">
-
-                    </div>
+                    <SearchFilterSection/>
+                    <ContentFilterSection
+                        data={props.filters}
+                        onSendCheckedData={onGetFilters}
+                    />
                 </div>
             </div>
         </div>
@@ -109,10 +124,11 @@ function Filter(props) {
 }
 
 function mapStateToProps(state) {
-    const { contexts, dimentions } = state.filters;
+    const { contexts, dimentions, filters } = state.filters;
     return {
         contexts,
-        dimentions
+        dimentions,
+        filters,
     }
 }
 

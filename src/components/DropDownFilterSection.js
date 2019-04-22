@@ -1,17 +1,17 @@
-import React, {useState, useMemo} from 'react';
+import React, {useState, useMemo, useCallback} from 'react';
 import '../styles/DropDownFilterSection.scss';
 
 function DropDownFilterSection(props) {
 
     const [forceUpdateVariable, forceUpdate] = useState(false);
-    const [stateData, changeStateData] = useState(new Set());
+    const [stateData, setStateData] = useState(new Set());
     const key = props.key ? props.key : 'id';
     const value = props.value ? props.value : 'name';
 
     const toggleDropDown = (e) => {
         e.stopPropagation();
         if (props.isDisplaying && props.onSendCheckedData) {
-            props.onSendCheckedData([...stateData]);
+            props.onSendCheckedData(stateData);
         }
         if (props.onToggleList) {
             props.onToggleList();
@@ -37,7 +37,7 @@ function DropDownFilterSection(props) {
             stateData.delete(Number.parseInt(e.target.value));
             e.target.checked = false;
         }
-        changeStateData(stateData);
+        setStateData(stateData);
         forceUpdate(!forceUpdateVariable); //Force update analoque
         e.stopPropagation(stateData);
     };
@@ -45,7 +45,7 @@ function DropDownFilterSection(props) {
     const renderList = (data) => {
         if (Array.isArray(data) && data.length > 0) {
             const uniqueId = Math.random();
-            return <form><ul className="list-group">
+            return <ul className="list-group">
                 {data.map((item, i) => (
                 <li key={`li_${uniqueId}_${i}`}>
                     <div className="checkbox">
@@ -68,12 +68,12 @@ function DropDownFilterSection(props) {
                 </li>
                 )
                 )}
-            </ul></form>
+            </ul>
         }
     };
 
     return (
-        <div className="Drop-down-section">
+        <div className="Filter-section Drop-down-section">
             <p>
                 <i className="material-icons pointer" onClick={toggleDropDown}>{props.isDisplaying ? 'expand_less' : 'expand_more'}</i>
                 <span className="Drop-down-section-title">{props.title}</span>
