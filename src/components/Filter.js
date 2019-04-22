@@ -2,7 +2,6 @@ import React, {useState, useEffect} from 'react';
 import '../styles/Filter.scss';
 import DropDownFilterSection from './DropDownFilterSection';
 import { connect } from 'react-redux';
-import configureStore from '../store/ConfigureStore'
 import {filtersActions} from '../actions/Filters';
 
 function Filter(props) {
@@ -12,7 +11,8 @@ function Filter(props) {
 
     const [styles, changeStyles] = useState({});
     const [isDraggable, changeDraggableState] = useState(false);
-    const [dimentions, setDimentions] = useState([]);
+    const [isContextListDisplaying, changeIsContextListDisplaying] = useState(false);
+    const [isDimentionsListDisplaying, changeIsDimentionsListDisplaying] = useState(false);
 
     useEffect(() => { //Subscribe on mount
         window.addEventListener('mouseup', onMouseUp);
@@ -47,13 +47,32 @@ function Filter(props) {
         e.stopPropagation();
     };
 
-    let onSelectContexts = (ids) => {
-        debugger;
-        configureStore.dispatch(filtersActions.getDimentions(ids));
+    const closeAllLists = () => {
+        changeIsContextListDisplaying(false);
+        changeIsDimentionsListDisplaying(false);
     };
 
-    let onSelectDimentions = (ids) => {
-        debugger;
+    const onToggleContexts = () => {
+        if (!isContextListDisplaying) {
+            closeAllLists();
+        }
+        changeIsContextListDisplaying(!isContextListDisplaying);
+
+    };
+
+    const onGetContexts = (ids) => {
+        props.dispatch(filtersActions.getDimentions(ids));
+    };
+
+    const onToggleDimentions = () => {
+        if (!isDimentionsListDisplaying) {
+            closeAllLists();
+        }
+        changeIsDimentionsListDisplaying(!isDimentionsListDisplaying);
+    };
+
+    const onGetDimentions = (ids) => {
+        props.dispatch(filtersActions.getFilters(ids));
     };
 
     return (
@@ -67,13 +86,17 @@ function Filter(props) {
                 <div className="Filter-modal-body">
                     <DropDownFilterSection
                         title="CONTEXTS"
-                        onCloseList={onSelectContexts}
+                        onToggleList={onToggleContexts}
+                        onSendCheckedData={onGetContexts}
                         data={props.contexts}
+                        isDisplaying={isContextListDisplaying}
                     />
                     <DropDownFilterSection
                         title="DIMENTIONS"
-                        onCloseList={onSelectDimentions}
-                        data={dimentions}
+                        onToggleList={onToggleDimentions}
+                        onSendCheckedData={onGetDimentions}
+                        data={props.dimentions}
+                        isDisplaying={isDimentionsListDisplaying}
                     />
 
                     <div className="Filter-modal-body-section">

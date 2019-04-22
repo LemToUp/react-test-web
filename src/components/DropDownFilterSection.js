@@ -1,35 +1,44 @@
-import React, {useState, useEffect} from 'react';
+import React, {useState, useMemo} from 'react';
 import '../styles/DropDownFilterSection.scss';
 
 function DropDownFilterSection(props) {
 
-    const [isDropDownShow, changeDropDownState] = useState(false);
     const [forceUpdateVariable, forceUpdate] = useState(false);
     const [stateData, changeStateData] = useState(new Set());
     const key = props.key ? props.key : 'id';
     const value = props.value ? props.value : 'name';
+
     const toggleDropDown = (e) => {
         e.stopPropagation();
-        if (isDropDownShow) {
-            props.onCloseList([...stateData]);
+        if (props.isDisplaying && props.onSendCheckedData) {
+            props.onSendCheckedData([...stateData]);
         }
-        changeDropDownState(!isDropDownShow);
+        if (props.onToggleList) {
+            props.onToggleList();
+        }
     };
 
+    const checkedDataString = useMemo(() => {
+        return props.data ? props.data
+            .filter(value => stateData.has(value.id))
+            .map(value => value.name)
+            .join(', ') : '';
+    }, [props.data, stateData, forceUpdateVariable]);
+
     const hasDataValue = (value) => {
-        return stateData.has(value.toString());
+        return stateData.has(value);
     };
 
     const onChangeData = (e) => {
         if (e.target.checked) {
-            stateData.add(e.target.value);
+            stateData.add(Number.parseInt(e.target.value));
             e.target.checked = true;
         } else {
-            stateData.delete(e.target.value);
+            stateData.delete(Number.parseInt(e.target.value));
             e.target.checked = false;
         }
         changeStateData(stateData);
-        forceUpdate(!forceUpdateVariable); //Variable for the layout re-render, because watcher doesn`t check Set or Array changes
+        forceUpdate(!forceUpdateVariable); //Force update analoque
         e.stopPropagation(stateData);
     };
     
@@ -65,9 +74,12 @@ function DropDownFilterSection(props) {
 
     return (
         <div className="Drop-down-section">
-            <i className="material-icons pointer" onClick={toggleDropDown}>{isDropDownShow ? 'expand_less' : 'expand_more'}</i>
-            <span>{props.title}</span>
-            <div className={`Drop-down-modal ${!isDropDownShow ? 'd-none' : ''}`}>
+            <p>
+                <i className="material-icons pointer" onClick={toggleDropDown}>{props.isDisplaying ? 'expand_less' : 'expand_more'}</i>
+                <span className="Drop-down-section-title">{props.title}</span>
+                <span className="Drop-down-section-row">{checkedDataString}</span>
+            </p>
+            <div className={`Drop-down-modal ${!props.isDisplaying ? 'd-none' : ''}`}>
                 {renderList(props.data)}
             </div>
         </div>

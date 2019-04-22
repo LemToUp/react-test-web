@@ -8,16 +8,33 @@
   font-size: 0.7em;
   background-color: $filter-dark-color;
   border-bottom: 1px solid #c9c9c9;
+  white-space: nowrap;
+  color: $color-react-blue;
+  overflow:hidden;
+
+  p {
+    white-space: nowrap;
+    overflow: hidden !important;
+    text-overflow: ellipsis;
+    margin-bottom: 0;
+  }
 
   i {
     font-size: 1em;
     font-weight: bold;
     padding: 5px;
     cursor: pointer;
+    color: #fff;
   }
 
-  span {
+  .Drop-down-section-title {
     font-weight: bold;
+    margin-right: 10px;
+    color: #fff;
+  }
+
+  .Drop-down-section-row {
+    text-overflow: ellipsis;
   }
 }
 
