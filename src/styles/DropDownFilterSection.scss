@@ -1,7 +1,7 @@
 @import './_colors.scss';
 
 .Drop-down-section {
-  color: $color-react-blue;
+  color: $color-react-blue-color;
   overflow:hidden;
 
   p {
@@ -41,7 +41,9 @@
   z-index: 1000;
 
   ul {
-    border-top: 5px solid $color-react-blue;
-    border-bottom: 2px solid $color-react-blue;
+    border-top: 5px solid $color-react-blue-color;
+    border-bottom: 1px solid $filter-grey-color;
+    border-left: 1px solid $filter-grey-color;
+    border-right: 1px solid $filter-grey-color;
   }
 }

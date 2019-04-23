@@ -1,4 +1,4 @@
-import React, {useState, useEffect, useCallback, useMemo} from 'react';
+import React, {useState, useEffect} from 'react';
 import '../styles/Filter.scss';
 import DropDownFilterSection from './DropDownFilterSection';
 import SearchFilterSection from './SearchFilterSection';
@@ -61,13 +61,24 @@ function Filter(props) {
     const onToggleContexts = () => {
         if (!isContextListDisplaying) {
             closeAllLists();
+        } else {
+            setIsDimentionsListDisplaying(true);
         }
         setIsContextListDisplaying(!isContextListDisplaying);
     };
 
-    const onGetContexts = (ids) => {
+    const onGetContexts = (ids = new Set()) => {
         setContextState(ids);
-        props.dispatch(filtersActions.getDimentions([...ids]));
+        props.dispatch(filtersActions.getDimentions([...ids]))
+            .then((action) => {
+                if (props.filters && props.filters.length > 0) {
+                    //const dimentions = state.data;
+                    if (action.data && action.data.length > 0) {
+                        recalculateFilters(action.data.map(dimention => dimention.id));
+                    }
+                }
+                return action;
+        });
     };
 
     const onToggleDimentions = () => {
@@ -77,16 +88,27 @@ function Filter(props) {
         setIsDimentionsListDisplaying(!isDimentionsListDisplaying);
     };
 
-    const onGetDimentions = (ids) => {
+    const onGetDimentions = (ids = new Set()) => {
         setDimentionsState(ids);
-        props.dispatch(filtersActions.getFilters([...ids]));
+        props.dispatch(filtersActions.getFilters([...ids])).then((action) => {
+            console.log(action);
+        }).then((action) => {
+            console.log(props.filters);
+        });
     };
 
-    const onGetFilters = (ids) => {
-        setFiltersState(ids);
-        if (props.onGetData) {
-            props.onGetData([...ids]);
-        }
+    const onGetFilters = (data) => {
+        setFiltersState(data);
+        props.onGetData(data);
+    };
+
+    const recalculateFilters = (dimentionsId) => { //Exclude filters of not existing dimentions after Context changed
+        let availableIds = props.filters.map(filter => filter.category_id).filter(
+            (categotyId) => {
+                return dimentionsId.find((id) => id === categotyId)
+            });
+        availableIds = new Set(availableIds);
+        props.dispatch(filtersActions.getFilters([...availableIds]));
     };
 
     return (
@@ -132,6 +154,6 @@ function mapStateToProps(state) {
     }
 }
 
-const connectedFilter = connect(mapStateToProps)(Filter);
+const ConnectedFilter = connect(mapStateToProps)(Filter);
 
-export default connectedFilter;
+export default ConnectedFilter;

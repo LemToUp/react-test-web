@@ -1,10 +1,12 @@
 import React, {useState} from 'react';
 import '../styles/WidgetPanel.scss';
 import Filter from './Filter'
+import {connect} from 'react-redux';
 
-export default function WidgetPanel() {
+function WidgetPanel(props) {
     const [isFilterShow, toggleFilter] = useState(false);
-    const [filtersData, setFiltersData] = useState([]);
+    const [selectedFilters, setSelectedFilters] = useState(new Set());
+    const [forceUpdateVariable, forceUpdate] = useState(false);
 
     const onToggleFilter = (e) => {
         e.stopPropagation();
@@ -12,14 +14,14 @@ export default function WidgetPanel() {
     };
 
     const onGetFilters = (data) => {
-        setFiltersData(data);
+        setSelectedFilters(data);
+        forceUpdate(!forceUpdateVariable);
     };
 
     const renderList = (data) => {
-        if (Array.isArray(data) && data.length > 0) {
-            //debugger;
+        if (Array.isArray(data) && data.length > 0 && selectedFilters.size > 0) {
             return <ul className="list-group">
-                {data.map((item, i) => (
+                {data.filter(item => selectedFilters.has(item.id)).map((item, i) => (
                         <li key={i}>
                             <p>{item.name}</p>
                         </li>
@@ -43,8 +45,19 @@ export default function WidgetPanel() {
                 /> : undefined}
 
             <div className="Widget-list">
-                {renderList(filtersData)}
+                {renderList(props.filters)}
             </div>
         </section>
     );
 }
+
+function mapStateToProps(state) {
+    const { filters } = state.filters;
+    return {
+        filters,
+    }
+}
+
+const ConnectedWidgetPanel = connect(mapStateToProps)(WidgetPanel);
+
+export default ConnectedWidgetPanel;

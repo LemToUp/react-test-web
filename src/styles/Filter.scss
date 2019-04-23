@@ -25,7 +25,7 @@
   color: #fff;
   position: fixed;
   z-index: 1000;
-  width: 200px;
+  width: 300px;
 }
 
 .Filter-modal-header {
@@ -50,7 +50,7 @@
     i:hover {
       background-color: lighten($filter-oppacity-color, 50%);
       border-radius: calc(6px + 2vmin);
-      color: $color-react-blue;
+      color: $color-react-blue-color;
     }
   }
 }

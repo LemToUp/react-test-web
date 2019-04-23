@@ -9,24 +9,24 @@ export const filtersActions = {
 
 function getContexts() {
     return dispatch => {
-        filtersService.getContextsList().then((data)=> {
-            dispatch({type: filtersConstants.GET_CONTEXTS_LIST, data});
+        return filtersService.getContextsList().then((data)=> {
+            return dispatch({type: filtersConstants.GET_CONTEXTS_LIST, data});
         });
     }
 }
 
 function getDimentions(ids) {
     return dispatch => {
-        filtersService.getDimentionsList(ids).then((data)=> {
-            dispatch({type: filtersConstants.GET_DIMENTIONS_LIST, data});
+        return filtersService.getDimentionsList(ids).then((data)=> {
+            return dispatch({type: filtersConstants.GET_DIMENTIONS_LIST, data});
         });
     }
 }
 
 function getFilters(ids) {
     return dispatch => {
-        filtersService.getFiltersList(ids).then((data)=> {
-            dispatch({type: filtersConstants.GET_FILTERS_LIST, data});
+        return filtersService.getFiltersList(ids).then((data)=> {
+            return dispatch({type: filtersConstants.GET_FILTERS_LIST, data});
         });
     }
 }

@@ -1,0 +1,34 @@
+@import './_colors.scss';
+
+.Search-filter-section {
+  .input-group-text {
+    background-color: $filter-grey-color;
+    padding: 5px;
+    height: 30px;
+  }
+
+  .form-control {
+    background-color: $filter-grey-color;
+    padding: 5px;
+    color: #DADADA;
+    height: 30px;
+  }
+
+  .form-control:focus {
+    color: #fff;
+  }
+
+  i {
+    color: #fff;
+  }
+
+  .btn-secondary {
+    background-color: $filter-grey-color;
+  }
+
+  .btn-group {
+    i {
+      font-size: 10px;
+    }
+  }
+}
