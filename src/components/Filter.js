@@ -111,6 +111,10 @@ function Filter(props) {
         props.dispatch(filtersActions.getFilters([...availableIds]));
     };
 
+    const onGetSortRules = (data) => {
+        debugger;
+    };
+
     return (
         <div className="Filter-modal-wrapper">
             <div className="Filter-modal" style={styles}>
@@ -134,7 +138,7 @@ function Filter(props) {
                         data={props.dimentions}
                         isDisplaying={isDimentionsListDisplaying}
                     />
-                    <SearchFilterSection/>
+                    <SearchFilterSection onSendData={onGetSortRules}/>
                     <ContentFilterSection
                         data={props.filters}
                         onSendCheckedData={onGetFilters}

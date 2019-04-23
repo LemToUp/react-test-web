@@ -10,7 +10,7 @@
   .form-control {
     background-color: $filter-grey-color;
     padding: 5px;
-    color: #DADADA;
+    color: $filter-grey-light-color;
     height: 30px;
   }
 
@@ -30,5 +30,24 @@
     i {
       font-size: 10px;
     }
+    .dropdown-menu {
+      min-width: auto;
+      padding: 0;
+      background-color: $filter-grey-color;
+      .dropdown-item {
+        color: #fff;
+        border-bottom: 1px solid $filter-grey-light-color;
+        transition: 0.3s;
+        padding: 5px 10px;
+      }
+      .dropdown-item:hover {
+        background-color: $filter-dark-color;
+      }
+      .dropdown-item:focus {
+        background-color: $filter-dark-color;
+      }
+    }
   }
+
+
 }
