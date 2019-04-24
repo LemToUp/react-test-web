@@ -5,7 +5,7 @@ import SearchFilterSection from './SearchFilterSection';
 import ContentFilterSection from './ContentFilterSection';
 import {connect} from 'react-redux';
 import {filtersActions} from '../actions/Filters';
-import {filtersConstants} from '../constants/Filters';
+import {filtersDataActions} from '../actions/FilterData';
 
 function Filter(props) {
     const onClose = (e) => {
@@ -17,10 +17,6 @@ function Filter(props) {
     const [isContextListDisplaying, setIsContextListDisplaying] = useState(false);
     const [isDimentionsListDisplaying, setIsDimentionsListDisplaying] = useState(false);
 
-    const [checkedContextState, setCheckedContextState] = useState(new Set());
-    const [checkedDimentionsState, setCheckedDimentionsState] = useState(new Set());
-    const [checkedFiltersState, setCheckedFiltersState] = useState(new Set());
-
     useEffect(() => { //Subscribe on mount
         window.addEventListener('mouseup', onMouseUp);
         window.addEventListener('mousemove', onMouseMove);
@@ -29,6 +25,13 @@ function Filter(props) {
             window.removeEventListener('mousemove', onMouseMove);
         };
     });
+
+    useEffect(
+        () => {
+            storePersonalContextsData(props.contexts);
+        },
+        [],
+    );
 
     const onMouseUp = (e) => {
         if (isDraggable) {
@@ -76,72 +79,79 @@ function Filter(props) {
     };
 
     const onGetContexts = (ids = new Set()) => {
-        dataHandler(filtersConstants.GET_CONTEXTS_LIST, ids);
+        storePersonalContextsChecks([...ids]);
+        getDimentions(ids);
     };
 
     const onGetDimentions = (ids = new Set()) => {
-        dataHandler(filtersConstants.GET_DIMENTIONS_LIST, ids);
+        storePersonalDimentionsChecks([...ids]);
+        getFilters(ids);
     };
 
     const onGetFilters = (ids) => {
-        dataHandler(filtersConstants.GET_FILTERS_LIST, ids);
+        storePersonalFiltersChecks([...ids]);
+        if (props.onGetData) {
+            props.onGetData(ids);
+        }
+    };
+
+    const getDimentions = (ids) => {
+        props.dispatch(filtersActions.getDimentions([...ids])) //Get Dimentions depends on Context ids
+            .then((action) => {
+                debugger;
+                storePersonalDimentionsData(action.data);
+
+                if (props.filters && props.filters.length > 0) { //Recalculate filters on Dimention changes
+                    if (action.data) {
+                        const currentDimentionsIds = action.data.map(dimention => dimention.id);
+                        const dimentionsIds = props.filters.map(filter => filter.category_id).filter(
+                            (categotyId) => {
+                                return currentDimentionsIds.find((id) => id === categotyId)
+                            });
+                        getFilters(new Set(dimentionsIds));
+                    }
+                }
+                return action;
+            });
+    };
+
+    const getFilters = (ids) => {
+        const curDimentionsIds = props.dimentions.map(dimention => dimention.id);
+        const dimentionsIds = [...ids].filter(dimentionId => { //Exclude missing Dimentions
+            return curDimentionsIds.find((id) => id === dimentionId);
+        });
+        props.dispatch(filtersActions.getFilters(dimentionsIds)).then((action) => {  //Get Filters depends on Dimentions ids
+            storePersonalFiltersData(action.data);
+            return action;
+        });
     };
 
     const onGetSortRules = (data) => {
         debugger;
     };
 
-    const dataHandler = (filtersConstant, ids = new Set()) => {
-        switch (filtersConstant) { //Save current checked data
-            case filtersConstants.GET_CONTEXTS_LIST:
-                setCheckedContextState(ids);
-                break;
-            case filtersConstants.GET_DIMENTIONS_LIST:
-                setCheckedDimentionsState(ids);
-                break;
-            case filtersConstants.GET_FILTERS_LIST:
-                setCheckedFiltersState(ids);
-                if (props.onGetData) {
-                    props.onGetData(ids);
-                }
-                break;
-            default:
-        }
+    const storePersonalContextsData = (data) => {
+        props.dispatch(filtersDataActions.setContextsDataByFilter(props.name, data));
+    };
 
-        let contextsIds = undefined;
-        let dimentionsIds = undefined;
-        switch (filtersConstant) { //Save current checked data
-            case filtersConstants.GET_CONTEXTS_LIST:
-                contextsIds = [...ids];
-                props.dispatch(filtersActions.getDimentions(contextsIds)) //Get Dimentions depends on Context ids
-                    .then((action) => {
-                        if (props.filters && props.filters.length > 0) { //Recalculate filters on Dimention changes
-                            if (action.data && action.data.length > 0) {
-                                const currentDimentionsIds = action.data.map(dimention => dimention.id);
-                                dimentionsIds = props.filters.map(filter => filter.category_id).filter(
-                                    (categotyId) => {
-                                        return currentDimentionsIds.find((id) => id === categotyId)
-                                    });
-                            }
-                        }
-                        return action;
-                    });
-            case filtersConstants.GET_DIMENTIONS_LIST:
-                if (filtersConstant === filtersConstants.GET_DIMENTIONS_LIST) {
-                    dimentionsIds = [...ids];
-                }
+    const storePersonalContextsChecks = (checks) => {
+        props.dispatch(filtersDataActions.setContextsChecksByFilter(props.name, checks));
+    };
 
-                if (dimentionsIds) {
-                    const curDimentionsIds = props.dimentions.map(dimention => dimention.id);
-                    dimentionsIds = dimentionsIds.filter(dimentionId => { //Exclude missing Dimentions
-                        return curDimentionsIds.find((id) => id === dimentionId);
-                    });
-                    props.dispatch(filtersActions.getFilters(dimentionsIds)); //Get Filters depends on Dimentions ids
-                }
+    const storePersonalDimentionsData = (data) => {
+        props.dispatch(filtersDataActions.setDimentionsDataByFilter(props.name, data));
+    };
 
-            case filtersConstants.GET_FILTERS_LIST:
-            default:
-        }
+    const storePersonalDimentionsChecks = (checks) => {
+        props.dispatch(filtersDataActions.setDimentionsChecksByFilter(props.name, checks));
+    };
+
+    const storePersonalFiltersData = (data) => {
+        props.dispatch(filtersDataActions.setFiltersDataByFilter(props.name, data));
+    };
+
+    const storePersonalFiltersChecks = (checks) => {
+        props.dispatch(filtersDataActions.setFiltersChecksByFilter(props.name, checks));
     };
 
     return (
@@ -158,19 +168,19 @@ function Filter(props) {
                         title="CONTEXTS"
                         onToggleList={onToggleContexts}
                         onSendCheckedData={onGetContexts.bind(this)}
-                        data={props.contexts}
+                        data={props.filterContexts}
                         isDisplaying={isContextListDisplaying}
                     />
                     <DropDownFilterSection
                         title="DIMENTIONS"
                         onToggleList={onToggleDimentions}
                         onSendCheckedData={onGetDimentions}
-                        data={props.dimentions}
+                        data={props.filterDimentions}
                         isDisplaying={isDimentionsListDisplaying}
                     />
                     <SearchFilterSection onSendData={onGetSortRules}/>
                     <ContentFilterSection
-                        data={props.filters}
+                        data={props.filterFilters}
                         onSendCheckedData={onGetFilters}
                     />
                 </div>
@@ -179,12 +189,16 @@ function Filter(props) {
     );
 }
 
-function mapStateToProps(state) {
+function mapStateToProps(state, ownProps) {
     const {contexts, dimentions, filters} = state.filters;
+    const {filterContexts, filterDimentions, filterFilters} = state.filterData[ownProps.name];
     return {
         contexts,
+        filterContexts,
         dimentions,
+        filterDimentions,
         filters,
+        filterFilters,
     }
 }
 

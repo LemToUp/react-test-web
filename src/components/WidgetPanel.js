@@ -1,12 +1,20 @@
-import React, {useState} from 'react';
+import React, {useState, useEffect} from 'react';
 import '../styles/WidgetPanel.scss';
 import Filter from './Filter'
 import {connect} from 'react-redux';
+import {filtersDataActions} from '../actions/FilterData';
 
 function WidgetPanel(props) {
     const [isFilterShow, toggleFilter] = useState(false);
     const [selectedFilters, setSelectedFilters] = useState(new Set());
     const [forceUpdateVariable, forceUpdate] = useState(false);
+
+    useEffect(
+        () => {
+            props.dispatch(filtersDataActions.initFilterSection(`filter_${props.number}`));
+        },
+        [],
+    );
 
     const onToggleFilter = (e) => {
         e.stopPropagation();
