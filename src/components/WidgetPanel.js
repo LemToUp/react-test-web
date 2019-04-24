@@ -42,6 +42,7 @@ function WidgetPanel(props) {
                 <Filter
                     closeEvent={onToggleFilter}
                     onGetData={onGetFilters}
+                    name={`filter_${props.number}`}
                 /> : undefined}
 
             <div className="Widget-list">

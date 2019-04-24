@@ -3,8 +3,9 @@ import '../styles/Filter.scss';
 import DropDownFilterSection from './DropDownFilterSection';
 import SearchFilterSection from './SearchFilterSection';
 import ContentFilterSection from './ContentFilterSection';
-import { connect } from 'react-redux';
-import { filtersActions } from '../actions/Filters';
+import {connect} from 'react-redux';
+import {filtersActions} from '../actions/Filters';
+import {filtersConstants} from '../constants/Filters';
 
 function Filter(props) {
     const onClose = (e) => {
@@ -16,9 +17,9 @@ function Filter(props) {
     const [isContextListDisplaying, setIsContextListDisplaying] = useState(false);
     const [isDimentionsListDisplaying, setIsDimentionsListDisplaying] = useState(false);
 
-    const [contextState, setContextState] = useState(new Set());
-    const [dimentionsState, setDimentionsState] = useState(new Set());
-    const [filtersState, setFiltersState] = useState(new Set());
+    const [checkedContextState, setCheckedContextState] = useState(new Set());
+    const [checkedDimentionsState, setCheckedDimentionsState] = useState(new Set());
+    const [checkedFiltersState, setCheckedFiltersState] = useState(new Set());
 
     useEffect(() => { //Subscribe on mount
         window.addEventListener('mouseup', onMouseUp);
@@ -67,20 +68,6 @@ function Filter(props) {
         setIsContextListDisplaying(!isContextListDisplaying);
     };
 
-    const onGetContexts = (ids = new Set()) => {
-        setContextState(ids);
-        props.dispatch(filtersActions.getDimentions([...ids]))
-            .then((action) => {
-                if (props.filters && props.filters.length > 0) {
-                    //const dimentions = state.data;
-                    if (action.data && action.data.length > 0) {
-                        recalculateFilters(action.data.map(dimention => dimention.id));
-                    }
-                }
-                return action;
-        });
-    };
-
     const onToggleDimentions = () => {
         if (!isDimentionsListDisplaying) {
             closeAllLists();
@@ -88,31 +75,73 @@ function Filter(props) {
         setIsDimentionsListDisplaying(!isDimentionsListDisplaying);
     };
 
+    const onGetContexts = (ids = new Set()) => {
+        dataHandler(filtersConstants.GET_CONTEXTS_LIST, ids);
+    };
+
     const onGetDimentions = (ids = new Set()) => {
-        setDimentionsState(ids);
-        props.dispatch(filtersActions.getFilters([...ids])).then((action) => {
-            console.log(action);
-        }).then((action) => {
-            console.log(props.filters);
-        });
+        dataHandler(filtersConstants.GET_DIMENTIONS_LIST, ids);
     };
 
-    const onGetFilters = (data) => {
-        setFiltersState(data);
-        props.onGetData(data);
-    };
-
-    const recalculateFilters = (dimentionsId) => { //Exclude filters of not existing dimentions after Context changed
-        let availableIds = props.filters.map(filter => filter.category_id).filter(
-            (categotyId) => {
-                return dimentionsId.find((id) => id === categotyId)
-            });
-        availableIds = new Set(availableIds);
-        props.dispatch(filtersActions.getFilters([...availableIds]));
+    const onGetFilters = (ids) => {
+        dataHandler(filtersConstants.GET_FILTERS_LIST, ids);
     };
 
     const onGetSortRules = (data) => {
         debugger;
+    };
+
+    const dataHandler = (filtersConstant, ids = new Set()) => {
+        switch (filtersConstant) { //Save current checked data
+            case filtersConstants.GET_CONTEXTS_LIST:
+                setCheckedContextState(ids);
+                break;
+            case filtersConstants.GET_DIMENTIONS_LIST:
+                setCheckedDimentionsState(ids);
+                break;
+            case filtersConstants.GET_FILTERS_LIST:
+                setCheckedFiltersState(ids);
+                if (props.onGetData) {
+                    props.onGetData(ids);
+                }
+                break;
+            default:
+        }
+
+        let contextsIds = undefined;
+        let dimentionsIds = undefined;
+        switch (filtersConstant) { //Save current checked data
+            case filtersConstants.GET_CONTEXTS_LIST:
+                contextsIds = [...ids];
+                props.dispatch(filtersActions.getDimentions(contextsIds)) //Get Dimentions depends on Context ids
+                    .then((action) => {
+                        if (props.filters && props.filters.length > 0) { //Recalculate filters on Dimention changes
+                            if (action.data && action.data.length > 0) {
+                                const currentDimentionsIds = action.data.map(dimention => dimention.id);
+                                dimentionsIds = props.filters.map(filter => filter.category_id).filter(
+                                    (categotyId) => {
+                                        return currentDimentionsIds.find((id) => id === categotyId)
+                                    });
+                            }
+                        }
+                        return action;
+                    });
+            case filtersConstants.GET_DIMENTIONS_LIST:
+                if (filtersConstant === filtersConstants.GET_DIMENTIONS_LIST) {
+                    dimentionsIds = [...ids];
+                }
+
+                if (dimentionsIds) {
+                    const curDimentionsIds = props.dimentions.map(dimention => dimention.id);
+                    dimentionsIds = dimentionsIds.filter(dimentionId => { //Exclude missing Dimentions
+                        return curDimentionsIds.find((id) => id === dimentionId);
+                    });
+                    props.dispatch(filtersActions.getFilters(dimentionsIds)); //Get Filters depends on Dimentions ids
+                }
+
+            case filtersConstants.GET_FILTERS_LIST:
+            default:
+        }
     };
 
     return (
@@ -121,7 +150,8 @@ function Filter(props) {
                 <div className="Filter-modal-header">
                     <i className="material-icons pointer" onMouseDown={onMouseDown}>drag_indicator</i>
                     <span>FILTERS</span>
-                    <span className="Filter-close-icon"><i className="material-icons pointer" onClick={onClose}>close</i></span>
+                    <span className="Filter-close-icon"><i className="material-icons pointer"
+                                                           onClick={onClose}>close</i></span>
                 </div>
                 <div className="Filter-modal-body">
                     <DropDownFilterSection
@@ -150,7 +180,7 @@ function Filter(props) {
 }
 
 function mapStateToProps(state) {
-    const { contexts, dimentions, filters } = state.filters;
+    const {contexts, dimentions, filters} = state.filters;
     return {
         contexts,
         dimentions,

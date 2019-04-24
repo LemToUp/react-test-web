@@ -9,7 +9,7 @@ class App extends Component {
     let panelsRender = [];
     const panelsCount = 10;
     for(let i = 0; i < panelsCount; i++) {
-      panelsRender.push(<WidgetPanel key={i}/>);
+      panelsRender.push(<WidgetPanel key={i} number={i}/>);
     }
     return (
       <div className="App">
