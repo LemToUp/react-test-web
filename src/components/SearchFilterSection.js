@@ -1,10 +1,16 @@
 import React, {useState} from 'react';
 import '../styles/SearchFilterSection.scss';
 
+export const seachFilterConstants = {
+    SEARCH_FILTER_COMPARE_FULL: '**',
+    SEARCH_FILTER_COMPARE_PARTICAL: '*_',
+    SEARCH_FILTER_COMPARE_BEGINNING_FROM: '""',
+};
+
 function DropDownFilterSection(props) {
 
     const [isShowPopup, setIsShowPopup] = useState(false);
-    const [searchType, setCurrentSearchType] = useState('**');
+    const [searchType, setCurrentSearchType] = useState(seachFilterConstants.SEARCH_FILTER_COMPARE_FULL);
     const [searchValue, setSearchValue] = useState(undefined);
     const [sortType, setSortType] = useState(undefined);
 
@@ -56,9 +62,9 @@ function DropDownFilterSection(props) {
                         {searchType}
                     </button>
                     <div className="dropdown-menu" aria-labelledby="btnGroupDrop1" style={{display: isShowPopup ? 'block' : 'none'}}>
-                        <button className="dropdown-item" onClick={changeCurrentFilter.bind(this, '**')}>**</button>
-                        <button className="dropdown-item" onClick={changeCurrentFilter.bind(this, '*_')}>*_</button>
-                        <button className="dropdown-item" onClick={changeCurrentFilter.bind(this, '""')}>""</button>
+                        <button className="dropdown-item" onClick={changeCurrentFilter.bind(this, seachFilterConstants.SEARCH_FILTER_COMPARE_FULL)}>{seachFilterConstants.SEARCH_FILTER_COMPARE_FULL}</button>
+                        <button className="dropdown-item" onClick={changeCurrentFilter.bind(this, seachFilterConstants.SEARCH_FILTER_COMPARE_PARTICAL)}>{seachFilterConstants.SEARCH_FILTER_COMPARE_PARTICAL}</button>
+                        <button className="dropdown-item" onClick={changeCurrentFilter.bind(this, seachFilterConstants.SEARCH_FILTER_COMPARE_BEGINNING_FROM)}>{seachFilterConstants.SEARCH_FILTER_COMPARE_BEGINNING_FROM}</button>
                     </div>
                 </div>
             </div>
