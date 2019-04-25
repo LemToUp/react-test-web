@@ -7,6 +7,12 @@ import {connect} from 'react-redux';
 import {filtersActions} from '../actions/Filters';
 import {filtersDataActions} from '../actions/FilterData';
 
+export const dataTypes = {
+    CONTEXT: 'CONTEXTS',
+    DIMENTIONS: 'DIMENTIONS',
+    FILTERS: 'FILTERS',
+};
+
 function Filter(props) {
     const onClose = (e) => {
         props.closeEvent(e);
@@ -28,7 +34,7 @@ function Filter(props) {
 
     useEffect(
         () => {
-            storePersonalContextsData(props.contexts);
+            storeFilterData(dataTypes.CONTEXT, props.contexts);
         },
         [],
     );
@@ -79,17 +85,17 @@ function Filter(props) {
     };
 
     const onGetContexts = (ids = new Set()) => {
-        storePersonalContextsChecks([...ids]);
+        storeCheckedData(dataTypes.CONTEXT, [...ids]);
         getDimentions(ids);
     };
 
     const onGetDimentions = (ids = new Set()) => {
-        storePersonalDimentionsChecks([...ids]);
+        storeCheckedData(dataTypes.DIMENTIONS, [...ids]);
         getFilters(ids);
     };
 
     const onGetFilters = (ids) => {
-        storePersonalFiltersChecks([...ids]);
+        storeCheckedData(dataTypes.FILTERS, [...ids]);
         if (props.onGetData) {
             props.onGetData(ids);
         }
@@ -98,76 +104,86 @@ function Filter(props) {
     const getDimentions = (ids) => {
         props.dispatch(filtersActions.getDimentions([...ids])) //Get Dimentions depends on Context ids
             .then((action) => {
-                debugger;
-                storePersonalDimentionsData(action.data);
+                storeFilterData(dataTypes.DIMENTIONS, action.data);
 
                 if (props.filters && props.filters.length > 0) { //Recalculate filters on Dimention changes
                     if (action.data) {
-                        const currentDimentionsIds = action.data.map(dimention => dimention.id);
-                        const dimentionsIds = props.filters.map(filter => filter.category_id).filter(
-                            (categotyId) => {
-                                return currentDimentionsIds.find((id) => id === categotyId)
-                            });
-                        getFilters(new Set(dimentionsIds));
+                        getFilters(new Set(props.filterDimentionsChecks), action.data);
                     }
                 }
                 return action;
             });
     };
 
-    const getFilters = (ids) => {
-        const curDimentionsIds = props.dimentions.map(dimention => dimention.id);
-        const dimentionsIds = [...ids].filter(dimentionId => { //Exclude missing Dimentions
-            return curDimentionsIds.find((id) => id === dimentionId);
-        });
-        props.dispatch(filtersActions.getFilters(dimentionsIds)).then((action) => {  //Get Filters depends on Dimentions ids
-            storePersonalFiltersData(action.data);
+    const getFilters = (ids = new Set(), dimentionsData = undefined) => {
+        let dimentions = dimentionsData ? dimentionsData : props.filterDimentions; //For the async cases
+        const actualIds = excludeMissingIds(ids, dimentions);
+        props.dispatch(filtersActions.getFilters([...actualIds], props.sortRules)).then((action) => {  //Get Filters depends on Dimentions ids
+            storeFilterData(dataTypes.FILTERS, action.data);
             return action;
         });
     };
 
-    const onGetSortRules = (data) => {
-        debugger;
+    const excludeMissingIds = (ids = new Set(), checkedData = []) => { //Exclude ids which are missing at checkedData
+        const currentIds = checkedData.map(item => item.id);
+        const actialIds = [...ids].filter(incomingId => {
+            return currentIds.find((id) => id === incomingId);
+        });
+        return new Set(actialIds);
     };
 
-    const storePersonalContextsData = (data) => {
-        props.dispatch(filtersDataActions.setContextsDataByFilter(props.name, data));
+    const onGetSortRules = (filters) => {
+        props.dispatch(filtersDataActions.setSortRulesByFilter(props.name, filters));
+        if (props.filterDimentionsChecks && props.filterDimentionsChecks.length > 0) {
+            getFilters(new Set(props.filterDimentionsChecks));
+        }
     };
 
-    const storePersonalContextsChecks = (checks) => {
-        props.dispatch(filtersDataActions.setContextsChecksByFilter(props.name, checks));
+    const storeCheckedData = (type, checks) => {
+        switch (type) {
+            case dataTypes.CONTEXT:
+                props.dispatch(filtersDataActions.setContextsChecksByFilter(props.name, checks));
+                break;
+            case dataTypes.DIMENTIONS:
+                props.dispatch(filtersDataActions.setDimentionsChecksByFilter(props.name, checks));
+                break;
+            case dataTypes.FILTERS:
+                props.dispatch(filtersDataActions.setFiltersChecksByFilter(props.name, checks));
+                break;
+            default:
+        }
     };
 
-    const storePersonalDimentionsData = (data) => {
-        props.dispatch(filtersDataActions.setDimentionsDataByFilter(props.name, data));
-    };
-
-    const storePersonalDimentionsChecks = (checks) => {
-        props.dispatch(filtersDataActions.setDimentionsChecksByFilter(props.name, checks));
-    };
-
-    const storePersonalFiltersData = (data) => {
-        props.dispatch(filtersDataActions.setFiltersDataByFilter(props.name, data));
-    };
-
-    const storePersonalFiltersChecks = (checks) => {
-        props.dispatch(filtersDataActions.setFiltersChecksByFilter(props.name, checks));
+    const storeFilterData = (type, data) => {
+        switch (type) {
+            case dataTypes.CONTEXT:
+                props.dispatch(filtersDataActions.setContextsDataByFilter(props.name, data));
+                break;
+            case dataTypes.DIMENTIONS:
+                props.dispatch(filtersDataActions.setDimentionsDataByFilter(props.name, data));
+                break;
+            case dataTypes.FILTERS:
+                props.dispatch(filtersDataActions.setFiltersDataByFilter(props.name, data));
+                break;
+            default:
+        }
     };
 
     return (
         <div className="Filter-modal-wrapper">
             <div className="Filter-modal" style={styles}>
                 <div className="Filter-modal-header">
-                    <i className="material-icons pointer" onMouseDown={onMouseDown}>drag_indicator</i>
+                    <i className="material-icons draggable" onMouseDown={onMouseDown}>drag_indicator</i>
                     <span>FILTERS</span>
-                    <span className="Filter-close-icon"><i className="material-icons pointer"
-                                                           onClick={onClose}>close</i></span>
+                    <span className="Filter-close-icon">
+                        <i className="material-icons pointer" onClick={onClose}>close</i>
+                    </span>
                 </div>
                 <div className="Filter-modal-body">
                     <DropDownFilterSection
                         title="CONTEXTS"
                         onToggleList={onToggleContexts}
-                        onSendCheckedData={onGetContexts.bind(this)}
+                        onSendCheckedData={onGetContexts}
                         data={props.filterContexts}
                         isDisplaying={isContextListDisplaying}
                     />
@@ -178,7 +194,10 @@ function Filter(props) {
                         data={props.filterDimentions}
                         isDisplaying={isDimentionsListDisplaying}
                     />
-                    <SearchFilterSection onSendData={onGetSortRules}/>
+                    <SearchFilterSection
+                        onSendData={onGetSortRules}
+                        sortData={props.sortRules}
+                    />
                     <ContentFilterSection
                         data={props.filterFilters}
                         onSendCheckedData={onGetFilters}
@@ -191,14 +210,26 @@ function Filter(props) {
 
 function mapStateToProps(state, ownProps) {
     const {contexts, dimentions, filters} = state.filters;
-    const {filterContexts, filterDimentions, filterFilters} = state.filterData[ownProps.name];
+    const {
+        filterContexts,
+        filterContextsChecks,
+        filterDimentions,
+        filterDimentionsChecks,
+        filterFilters,
+        filterFiltersChecks,
+        sortRules
+    } = state.filterData[ownProps.name];
     return {
         contexts,
-        filterContexts,
         dimentions,
-        filterDimentions,
         filters,
+        filterContexts,
+        filterContextsChecks,
+        filterDimentions,
+        filterDimentionsChecks,
         filterFilters,
+        filterFiltersChecks,
+        sortRules,
     }
 }
 

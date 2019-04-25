@@ -169,7 +169,7 @@
   },
   {
     "id" : 33,
-    "name" : "IPG",
+    "name" : "Roll",
     "category_id": 9
   },
   {
@@ -190,7 +190,7 @@
   },
   {
     "id" : 37,
-    "name" : "Roll",
+    "name" : "IPG",
     "category_id": 10
   }
 ]

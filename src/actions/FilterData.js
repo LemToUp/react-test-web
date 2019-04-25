@@ -2,35 +2,18 @@ import {filterDataConstants} from '../constants/FilterData';
 
 export const filtersDataActions = {
     initFilterSection,
-    getContextsDataByFilter,
-    getContextsChecksByFilter,
     setContextsDataByFilter,
     setContextsChecksByFilter,
-    getDimentionsDataByFilter,
-    getDimentionsChecksByFilter,
     setDimentionsDataByFilter,
     setDimentionsChecksByFilter,
-    getFiltersDataByFilter,
-    getFiltersChecksByFilter,
     setFiltersDataByFilter,
     setFiltersChecksByFilter,
+    setSortRulesByFilter,
 };
 
 function initFilterSection(name) {
     return dispatch => {
         return dispatch({type: filterDataConstants.INIT_FILTER_SECTION, name});
-    }
-}
-
-function getContextsDataByFilter(name) {
-    return dispatch => {
-        return dispatch({type: filterDataConstants.GET_CONTEXTS_LIST_BY_FILTER, name});
-    }
-}
-
-function getContextsChecksByFilter(name) {
-    return dispatch => {
-        return dispatch({type: filterDataConstants.GET_CONTEXTS_CHECKS_BY_FILTER, name});
     }
 }
 
@@ -40,22 +23,10 @@ function setContextsDataByFilter(name, data) {
     }
 }
 
-function setContextsChecksByFilter(name, checks) {
+function setContextsChecksByFilter(name, data) {
     return dispatch => {
-        return dispatch({type: filterDataConstants.SET_CONTEXTS_CHECKS_BY_FILTER, name, checks});
+        return dispatch({type: filterDataConstants.SET_CONTEXTS_CHECKS_BY_FILTER, name, data});
     }
-}
-
-function getDimentionsDataByFilter(name) {
-    return dispatch => {
-        return dispatch({type: filterDataConstants.GET_DIMENTIONS_LIST_BY_FILTER, name});
-    };
-}
-
-function getDimentionsChecksByFilter(name) {
-    return dispatch => {
-        return dispatch({type: filterDataConstants.GET_DIMENTIONS_LIST_BY_FILTER, name});
-    };
 }
 
 function setDimentionsDataByFilter(name, data) {
@@ -64,21 +35,9 @@ function setDimentionsDataByFilter(name, data) {
     };
 }
 
-function setDimentionsChecksByFilter(name, checks) {
+function setDimentionsChecksByFilter(name, data) {
     return dispatch => {
-        return dispatch({type: filterDataConstants.SET_DIMENTIONS_LIST_BY_FILTER, name, checks});
-    };
-}
-
-function getFiltersDataByFilter(name) {
-    return dispatch => {
-        return dispatch({type: filterDataConstants.GET_FILTERS_LIST_BY_FILTER, name});
-    };
-}
-
-function getFiltersChecksByFilter(name) {
-    return dispatch => {
-        return dispatch({type: filterDataConstants.GET_FILTERS_LIST_BY_FILTER, name});
+        return dispatch({type: filterDataConstants.SET_DIMENTIONS_CHECKS_BY_FILTER, name, data});
     };
 }
 
@@ -88,8 +47,14 @@ function setFiltersDataByFilter(name, data) {
     };
 }
 
-function setFiltersChecksByFilter(name, checks) {
+function setFiltersChecksByFilter(name, data) {
     return dispatch => {
-        return dispatch({type: filterDataConstants.SET_FILTERS_LIST_BY_FILTER, name, checks});
+        return dispatch({type: filterDataConstants.SET_FILTERS_CHECKS_BY_FILTER, name, data});
+    };
+}
+
+function setSortRulesByFilter(name, data) {
+    return dispatch => {
+        return dispatch({type: filterDataConstants.SET_SORT_RULES_BY_FILTER, name, data});
     };
 }

@@ -23,9 +23,9 @@ function getDimentions(ids) {
     }
 }
 
-function getFilters(ids) {
+function getFilters(ids, filters) {
     return dispatch => {
-        return filtersService.getFiltersList(ids).then((data)=> {
+        return filtersService.getFiltersList(ids, filters).then((data)=> {
             return dispatch({type: filtersConstants.GET_FILTERS_LIST, data});
         });
     }
