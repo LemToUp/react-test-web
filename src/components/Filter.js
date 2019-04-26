@@ -47,6 +47,7 @@ function Filter(props) {
     };
 
     const onMouseDown = (e) => {
+        e.preventDefault();
         if (!isDraggable) {
             setDraggableState(true);
         }
