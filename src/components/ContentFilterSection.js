@@ -1,33 +1,43 @@
-import React, {useState} from 'react';
+import React, {useState, useEffect} from 'react';
 import '../styles/ContentFilterSection.scss';
 
 function DropDownFilterSection(props) {
 
     const [forceUpdateVariable, forceUpdate] = useState(false);
-    const [stateData, setStateData] = useState(new Set());
     const key = props.key ? props.key : 'id';
     const value = props.value ? props.value : 'name';
 
+    useEffect(
+        () => {
+            if (!props.checks && props.onSendCheckedData) {
+                props.onSendCheckedData([]);
+            }
+        },
+        [],
+    );
+
     const hasDataValue = (value) => {
-        return stateData.has(value);
+        return props.checks.indexOf(value) !== -1;
     };
 
     const onChangeData = (e) => {
         if (e.target.checked) {
-            stateData.add(Number.parseInt(e.target.value));
+            props.checks.push(Number.parseInt(e.target.value));
             e.target.checked = true;
         } else {
-            stateData.delete(Number.parseInt(e.target.value));
+            const index = props.checks.indexOf(Number.parseInt(e.target.value));
+            if (index !== -1) {
+                props.checks.splice(index, 1);
+            }
             e.target.checked = false;
         }
-        setStateData(stateData);
         forceUpdate(!forceUpdateVariable); //Force update analoque
 
         if (props.onSendCheckedData) {
-            props.onSendCheckedData(stateData);
+            props.onSendCheckedData(props.checks);
         }
 
-        e.stopPropagation(stateData);
+        e.stopPropagation(true);
     };
 
     const renderList = (data) => {

@@ -72,6 +72,7 @@ function Filter(props) {
         if (!isContextListDisplaying) {
             closeAllLists();
         } else {
+            getDimentions(props.filterContextsChecks);
             setIsDimentionsListDisplaying(true);
         }
         setIsContextListDisplaying(!isContextListDisplaying);
@@ -80,22 +81,23 @@ function Filter(props) {
     const onToggleDimentions = () => {
         if (!isDimentionsListDisplaying) {
             closeAllLists();
+        } else {
+            getFilters(props.filterDimentionsChecks);
         }
         setIsDimentionsListDisplaying(!isDimentionsListDisplaying);
     };
 
-    const onGetContexts = (ids = new Set()) => {
-        storeCheckedData(dataTypes.CONTEXT, [...ids]);
+    const onGetContexts = (ids) => {
+        storeCheckedData(dataTypes.CONTEXT, ids);
         getDimentions(ids);
     };
 
-    const onGetDimentions = (ids = new Set()) => {
-        storeCheckedData(dataTypes.DIMENTIONS, [...ids]);
-        getFilters(ids);
+    const onGetDimentions = (ids) => {
+        storeCheckedData(dataTypes.DIMENTIONS, ids);
     };
 
     const onGetFilters = (ids) => {
-        storeCheckedData(dataTypes.FILTERS, [...ids]);
+        storeCheckedData(dataTypes.FILTERS, ids);
         if (props.onGetData) {
             props.onGetData(ids);
         }
@@ -186,6 +188,7 @@ function Filter(props) {
                         onSendCheckedData={onGetContexts}
                         data={props.filterContexts}
                         isDisplaying={isContextListDisplaying}
+                        checks={props.filterContextsChecks}
                     />
                     <DropDownFilterSection
                         title="DIMENTIONS"
@@ -193,6 +196,7 @@ function Filter(props) {
                         onSendCheckedData={onGetDimentions}
                         data={props.filterDimentions}
                         isDisplaying={isDimentionsListDisplaying}
+                        checks={props.filterDimentionsChecks}
                     />
                     <SearchFilterSection
                         onSendData={onGetSortRules}
@@ -201,6 +205,7 @@ function Filter(props) {
                     <ContentFilterSection
                         data={props.filterFilters}
                         onSendCheckedData={onGetFilters}
+                        checks={props.filterFiltersChecks}
                     />
                 </div>
             </div>
