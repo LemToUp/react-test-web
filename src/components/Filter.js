@@ -18,7 +18,7 @@ function Filter(props) {
         props.closeEvent(e);
     };
 
-    const [styles, setStyles] = useState({});
+    const [styles, setStyles] = useState({display: 'none'});
     const [isDraggable, setDraggableState] = useState(false);
     const [isContextListDisplaying, setIsContextListDisplaying] = useState(false);
     const [isDimentionsListDisplaying, setIsDimentionsListDisplaying] = useState(false);
@@ -35,6 +35,15 @@ function Filter(props) {
     useEffect(
         () => {
             storeFilterData(dataTypes.CONTEXT, props.contexts);
+        },
+        [],
+    );
+
+    useEffect(
+        () => {
+            if (props.initialPosition) {
+                setStyles(Object.assign({display: 'block'}, props.initialPosition));
+            }
         },
         [],
     );
@@ -180,11 +189,11 @@ function Filter(props) {
         <div className="Filter-modal-wrapper">
             <div className="Filter-modal container" style={styles}>
                 <div className="Filter-modal-header row p-1">
-                    <div className="col-md-2 px-1">
+                    <div className="col-2 px-1 pt-1">
                         <i className="material-icons draggable" onMouseDown={onMouseDown}>drag_indicator</i>
                     </div>
-                    <span className="col-md-8">FILTERS</span>
-                    <span className="Filter-close-icon col-md-2">
+                    <span className="col-8">FILTERS</span>
+                    <span className="Filter-close-icon col-2 pt-1 text-right">
                         <i className="material-icons pointer" onClick={onClose}>close</i>
                     </span>
                 </div>

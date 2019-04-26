@@ -12,13 +12,13 @@ class App extends Component {
       panelsRender.push(<WidgetPanel key={i} number={i}/>);
     }
     return (
-      <div className="App">
+      <div className="App container-fluid">
         <header className="App-header row justify-content-center">
           <img src={logo} className="App-logo" alt="logo" />
         </header>
         <div className="App-body row">
             <div className="col-md-8 offset-md-2">
-                    <div className="row">
+                    <div className="row m-1">
                         {panelsRender}
                     </div>
             </div>

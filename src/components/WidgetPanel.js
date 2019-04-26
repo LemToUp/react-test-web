@@ -8,6 +8,14 @@ function WidgetPanel(props) {
     const [isFilterShow, toggleFilter] = useState(false);
     const [selectedFilters, setSelectedFilters] = useState(new Set());
     const [forceUpdateVariable, forceUpdate] = useState(false);
+    const [initialFilterCoordinates, updateInitialFilterCoordinates] = useState({top: 0, left: 0});
+
+    useEffect(
+        () => {
+            props.dispatch(filtersDataActions.initFilterSection(`filter_${props.number}`));
+        },
+        [],
+    );
 
     useEffect(
         () => {
@@ -19,6 +27,10 @@ function WidgetPanel(props) {
     const onToggleFilter = (e) => {
         e.stopPropagation();
         e.preventDefault();
+        updateInitialFilterCoordinates({
+            top: `${e.clientY}px`,
+            left: `${e.clientX}px`
+        });
         toggleFilter(!isFilterShow);
     };
 
@@ -48,7 +60,7 @@ function WidgetPanel(props) {
                         {isFilterShow ? 'format_indent_decrease' : 'format_indent_increase'}
                     </i>
                 </div>
-                <div className="Widget-list col-md-8">
+                <div className="Widget-list col-8">
                     {renderList(selectedFilters)}
                 </div>
 
@@ -57,6 +69,7 @@ function WidgetPanel(props) {
                         closeEvent={onToggleFilter}
                         onGetData={onGetFilters}
                         name={`filter_${props.number}`}
+                        initialPosition={initialFilterCoordinates}
                     /> : undefined}
             </div>
         </section>
