@@ -13,11 +13,15 @@ class App extends Component {
     }
     return (
       <div className="App">
-        <header className="App-header">
+        <header className="App-header row justify-content-center">
           <img src={logo} className="App-logo" alt="logo" />
         </header>
-        <div className="App-body">
-          {panelsRender}
+        <div className="App-body row">
+            <div className="col-md-8 offset-md-2">
+                    <div className="row">
+                        {panelsRender}
+                    </div>
+            </div>
         </div>
       </div>
     );

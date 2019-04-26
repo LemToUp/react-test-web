@@ -3,15 +3,13 @@
 .Search-filter-section {
   .input-group-text {
     background-color: $filter-grey-color;
-    padding: 5px;
-    height: 30px;
+    height: 2rem;
   }
 
   .form-control {
     background-color: $filter-grey-color;
-    padding: 5px;
     color: $filter-grey-light-color;
-    height: 30px;
+    height: 2rem;
     caret-color: #fff;
   }
 
@@ -28,9 +26,6 @@
   }
 
   .btn-group {
-    i {
-      font-size: 10px;
-    }
     .dropdown-menu {
       min-width: auto;
       padding: 0;
@@ -39,7 +34,6 @@
         color: #fff;
         border-bottom: 1px solid $filter-grey-light-color;
         transition: 0.3s;
-        padding: 5px 10px;
       }
       .dropdown-item:hover {
         background-color: $filter-dark-color;
@@ -49,6 +43,4 @@
       }
     }
   }
-
-
 }

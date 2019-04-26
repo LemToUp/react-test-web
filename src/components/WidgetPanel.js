@@ -18,6 +18,7 @@ function WidgetPanel(props) {
 
     const onToggleFilter = (e) => {
         e.stopPropagation();
+        e.preventDefault();
         toggleFilter(!isFilterShow);
     };
 
@@ -27,11 +28,11 @@ function WidgetPanel(props) {
     };
 
     const renderList = (data) => {
-        if (Array.isArray(data) && data.length > 0 && selectedFilters.size > 0) {
-            return <ul className="list-group">
-                {data.filter(item => selectedFilters.has(item.id)).map((item, i) => (
+        if (Array.isArray(data) && data.length > 0) {
+            return <ul className="list-group m-2 p-1">
+                {data.map((filterName, i) => (
                         <li key={i}>
-                            <p>{item.name}</p>
+                            <p className="mb-0">{filterName}</p>
                         </li>
                     )
                 )}
@@ -40,21 +41,23 @@ function WidgetPanel(props) {
     };
 
     return (
-        <section className="Widget-panel">
-            <div className=" Widget-button">
-                <i className="material-icons btn-circle" onClick={onToggleFilter}>
-                    {isFilterShow ? 'format_indent_decrease' : 'format_indent_increase'}
-                </i>
-            </div>
-            {isFilterShow ?
-                <Filter
-                    closeEvent={onToggleFilter}
-                    onGetData={onGetFilters}
-                    name={`filter_${props.number}`}
-                /> : undefined}
+        <section className="Widget-panel col-md-4 mb-1 p-1">
+            <div className="row row align-items-start">
+                <div className="Widget-button col-md-4">
+                    <i className="material-icons btn-circle" onClick={onToggleFilter}>
+                        {isFilterShow ? 'format_indent_decrease' : 'format_indent_increase'}
+                    </i>
+                </div>
+                <div className="Widget-list col-md-8">
+                    {renderList(selectedFilters)}
+                </div>
 
-            <div className="Widget-list">
-                {renderList(props.filters)}
+                {isFilterShow ?
+                    <Filter
+                        closeEvent={onToggleFilter}
+                        onGetData={onGetFilters}
+                        name={`filter_${props.number}`}
+                    /> : undefined}
             </div>
         </section>
     );

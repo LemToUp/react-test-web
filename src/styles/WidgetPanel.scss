@@ -3,31 +3,17 @@
 .Widget-panel {
   background-color: #F7F7F7;
   min-height: 10vh;
-  padding: 0.3em;
-  margin: 0.2em 0;
-  flex-basis: 33%;
   border-left: 5px solid $color-react-blue-color;
   color: #000;
-  display: flex;
-}
-
-.Widget-button {
-  flex: 0.2;
 }
 
 .Widget-list {
-  flex: 0.8;
-  padding: 0 0 0 10px;
   ul {
-    font-size: 15px;
     background-color: #fff;
     list-style: none;
-    margin: 0 0 0 10px;
-    padding: 5px;
-    border-radius: 10px;
+    border-radius: 0.5rem;
   }
   p {
-    margin-bottom: 0;
     color: $color-react-blue-color;
     font-weight: bold;
   }

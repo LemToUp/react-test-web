@@ -59,6 +59,7 @@ function DropDownFilterSection(props) {
                                         name={item[key]}
                                         checked={hasDataValue(item[key]) ? true : undefined}
                                         onChange={onChangeData}
+                                        className="mx-1"
                                     />
                                     {item[value]}
                                 </label>
@@ -71,7 +72,7 @@ function DropDownFilterSection(props) {
     };
 
     return (
-        <div className="Filter-section Content-filter-section">
+        <div className={`Filter-section Content-filter-section ${props.className ? props.className : ''}`}>
             {renderList(props.data)}
         </div>
     );

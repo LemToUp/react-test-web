@@ -28,7 +28,7 @@ function DropDownFilterSection(props) {
 
     const checkedDataString = useMemo(() => {
         return props.data ? props.data
-            .filter(value => props.checks.indexOf(value) !== -1)
+            .filter(value => props.checks.indexOf(value.id) !== -1)
             .map(value => value.name)
             .join(', ') : '';
     }, [props.data, props.checks, forceUpdateVariable]);
@@ -55,10 +55,10 @@ function DropDownFilterSection(props) {
     const renderList = (data) => {
         if (Array.isArray(data) && data.length > 0) {
             const uniqueId = Math.random();
-            return <ul className="list-group">
+            return <ul className="list-group pr-5">
                 {data.map((item, i) => (
-                <li key={`li_${uniqueId}_${i}`}>
-                    <div className="checkbox">
+                <li className="p-1" key={`li_${uniqueId}_${i}`}>
+                    {/*<div className="checkbox">
                         <label
                             htmlFor={`${uniqueId}_${i}`}
                             key={`label_${uniqueId}_${i}`}
@@ -71,9 +71,29 @@ function DropDownFilterSection(props) {
                                 name={item[key]}
                                 checked={hasDataValue(item[key]) ? true : undefined}
                                 onChange={onChangeData}
+                                className=""
                             />
                             {item[value]}
                         </label>
+                    </div>*/}
+
+                    <div className="form-check">
+                        <input
+                            className="form-check-input"
+                            type="checkbox"
+                            id={`${uniqueId}_${i}`}
+                            value={item[key]}
+                            name={item[key]}
+                            checked={hasDataValue(item[key]) ? true : undefined}
+                            onChange={onChangeData}
+                        />
+                            <label
+                                className="form-check-label"
+                                htmlFor={`${uniqueId}_${i}`}
+                                key={`label_${uniqueId}_${i}`}
+                            >
+                                {item[value]}
+                            </label>
                     </div>
                 </li>
                 )
@@ -83,15 +103,17 @@ function DropDownFilterSection(props) {
     };
 
     return (
-        <div className="Filter-section Drop-down-section">
-            <p>
-                <i className="material-icons pointer" onClick={toggleDropDown}>{props.isDisplaying ? 'expand_less' : 'expand_more'}</i>
-                <span className="Drop-down-section-title">{props.title}</span>
-                <span className="Drop-down-section-row">{checkedDataString}</span>
-            </p>
-            <div className={`Drop-down-modal ${!props.isDisplaying ? 'd-none' : ''}`}>
-                {renderList(props.data)}
-            </div>
+        <div className={`Filter-section Drop-down-section ${props.className ? props.className : ''}`}>
+
+                <p>
+                    <i className="material-icons pointer p-1" onClick={toggleDropDown}>{props.isDisplaying ? 'expand_less' : 'expand_more'}</i>
+                    <span className="Drop-down-section-title mr-2">{props.title}</span>
+                    <span className="Drop-down-section-row">{checkedDataString}</span>
+                </p>
+                <div className={`Drop-down-modal ${!props.isDisplaying ? 'd-none' : ''}`}>
+                    {renderList(props.data)}
+                </div>
+
         </div>
     );
 }

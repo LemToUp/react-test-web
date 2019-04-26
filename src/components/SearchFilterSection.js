@@ -74,16 +74,16 @@ function DropDownFilterSection(props) {
     };
 
     return (
-        <div className="Filter-section Search-filter-section">
+        <div className={`Filter-section Search-filter-section ${props.className ? props.className : ''}`}>
             <div className="input-group mb-1">
                 <div className="input-group-prepend">
-                    <span className="input-group-text">
+                    <span className="input-group-text p-1">
                         <i className="material-icons pointer" onClick={onSendSearchPhrase}>search</i>
                     </span>
                 </div>
                 <input
                     type="text"
-                    className="form-control"
+                    className="form-control p-1"
                     onChange={onChangeSearchPhrase}
                     onKeyPress={onInputKeyUp}
                 />
@@ -105,13 +105,13 @@ function DropDownFilterSection(props) {
                     >
                         {props.sortData ? props.sortData.searchType : ''}
                     </button>
-                    <div className="dropdown-menu" aria-labelledby="btnGroupDrop1"
+                    <div className="dropdown-menu mt-0" aria-labelledby="btnGroupDrop1"
                          style={{display: isShowPopup ? 'block' : 'none'}}>
-                        <button className="dropdown-item"
+                        <button className="dropdown-item py-1 px-2"
                                 onClick={changeCurrentFilter.bind(this, seachFilterConstants.SEARCH_FILTER_COMPARE_FULL)}>{seachFilterConstants.SEARCH_FILTER_COMPARE_FULL}</button>
-                        <button className="dropdown-item"
+                        <button className="dropdown-item py-1 px-2"
                                 onClick={changeCurrentFilter.bind(this, seachFilterConstants.SEARCH_FILTER_COMPARE_PARTICAL)}>{seachFilterConstants.SEARCH_FILTER_COMPARE_PARTICAL}</button>
-                        <button className="dropdown-item"
+                        <button className="dropdown-item py-1 px-2"
                                 onClick={changeCurrentFilter.bind(this, seachFilterConstants.SEARCH_FILTER_COMPARE_BEGINNING_FROM)}>{seachFilterConstants.SEARCH_FILTER_COMPARE_BEGINNING_FROM}</button>
                     </div>
                 </div>

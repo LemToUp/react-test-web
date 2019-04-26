@@ -14,14 +14,12 @@
   i {
     font-size: 1em;
     font-weight: bold;
-    padding: 5px;
     cursor: pointer;
     color: #fff;
   }
 
   .Drop-down-section-title {
     font-weight: bold;
-    margin-right: 10px;
     color: #fff;
   }
 
@@ -34,7 +32,6 @@
   box-sizing: border-box;
   line-height: 1.5;
   margin: 0 auto;
-  font-size: calc(4px + 2vmin);
   background-color: $filter-dark-color;
   color: #fff;
   position: fixed;

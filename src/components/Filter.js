@@ -99,8 +99,12 @@ function Filter(props) {
 
     const onGetFilters = (ids) => {
         storeCheckedData(dataTypes.FILTERS, ids);
-        if (props.onGetData) {
-            props.onGetData(ids);
+        if (props.onGetData && props.filterFilters && props.filterFiltersChecks) {
+            props.onGetData(
+                props.filterFilters
+                    .filter((filter => props.filterFiltersChecks.indexOf(filter.id) !== -1))
+                    .map((filter) => filter.name)
+            );
         }
     };
 
@@ -174,15 +178,17 @@ function Filter(props) {
 
     return (
         <div className="Filter-modal-wrapper">
-            <div className="Filter-modal" style={styles}>
-                <div className="Filter-modal-header">
-                    <i className="material-icons draggable" onMouseDown={onMouseDown}>drag_indicator</i>
-                    <span>FILTERS</span>
-                    <span className="Filter-close-icon">
+            <div className="Filter-modal container" style={styles}>
+                <div className="Filter-modal-header row p-1">
+                    <div className="col-md-2 px-1">
+                        <i className="material-icons draggable" onMouseDown={onMouseDown}>drag_indicator</i>
+                    </div>
+                    <span className="col-md-8">FILTERS</span>
+                    <span className="Filter-close-icon col-md-2">
                         <i className="material-icons pointer" onClick={onClose}>close</i>
                     </span>
                 </div>
-                <div className="Filter-modal-body">
+                <div className="Filter-modal-body row align-items-end">
                     <DropDownFilterSection
                         title="CONTEXTS"
                         onToggleList={onToggleContexts}
@@ -190,6 +196,7 @@ function Filter(props) {
                         data={props.filterContexts}
                         isDisplaying={isContextListDisplaying}
                         checks={props.filterContextsChecks}
+                        className="col-md-10 offset-md-2 p-1"
                     />
                     <DropDownFilterSection
                         title="DIMENTIONS"
@@ -198,15 +205,18 @@ function Filter(props) {
                         data={props.filterDimentions}
                         isDisplaying={isDimentionsListDisplaying}
                         checks={props.filterDimentionsChecks}
+                        className="col-md-10 offset-md-2 p-1"
                     />
                     <SearchFilterSection
                         onSendData={onGetSortRules}
                         sortData={props.sortRules}
+                        className="col-md-10 offset-md-2 p-2"
                     />
                     <ContentFilterSection
                         data={props.filterFilters}
                         onSendCheckedData={onGetFilters}
                         checks={props.filterFiltersChecks}
+                        className="col-md-10 offset-md-2 p-1"
                     />
                 </div>
             </div>
