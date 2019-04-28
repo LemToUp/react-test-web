@@ -57,7 +57,6 @@ function Filter(props) {
 
     const onGetContexts = (ids) => {
         storeCheckedData(dataTypes.CONTEXT, ids);
-        getDimentions(ids);
     };
 
     const onGetDimentions = (ids) => {
@@ -66,20 +65,12 @@ function Filter(props) {
 
     const onGetFilters = (ids) => {
         storeCheckedData(dataTypes.FILTERS, ids);
-        if (props.onGetData && props.filterFilters && props.filterFiltersChecks) {
-            props.onGetData(
-                props.filterFilters
-                    .filter((filter => props.filterFiltersChecks.indexOf(filter.id) !== -1))
-                    .map((filter) => filter.name)
-            );
-        }
     };
 
     const getDimentions = (ids) => {
         props.dispatch(filtersActions.getDimentions([...ids])) //Get Dimentions depends on Context ids
             .then((action) => {
                 storeFilterData(dataTypes.DIMENTIONS, action.data);
-
                 if (props.filters && props.filters.length > 0) { //Recalculate filters on Dimention changes
                     if (action.data) {
                         getFilters(new Set(props.filterDimentionsChecks), action.data);
@@ -94,6 +85,7 @@ function Filter(props) {
         const actualIds = excludeMissingIds(ids, dimentions);
         props.dispatch(filtersActions.getFilters([...actualIds], props.sortRules)).then((action) => {  //Get Filters depends on Dimentions ids
             storeFilterData(dataTypes.FILTERS, action.data);
+            sendFiltersListToWidget(action.data, props.filterFiltersChecks);
             return action;
         });
     };
@@ -113,6 +105,16 @@ function Filter(props) {
         }
     };
 
+    const sendFiltersListToWidget = (filters, checks) => {
+        if (props.onGetData && filters && checks) {
+            props.onGetData(
+                filters
+                    .filter((filter =>checks.indexOf(filter.id) !== -1))
+                    .map((filter) => filter.name)
+            );
+        }
+    };
+
     const storeCheckedData = (type, checks) => {
         switch (type) {
             case dataTypes.CONTEXT:
@@ -123,6 +125,7 @@ function Filter(props) {
                 break;
             case dataTypes.FILTERS:
                 props.dispatch(filtersDataActions.setFiltersChecksByFilter(props.name, checks));
+                sendFiltersListToWidget(props.filterFilters, props.filterFiltersChecks);
                 break;
             default:
         }
