@@ -8,7 +8,7 @@ function DropDownFilterSection(props) {
     const value = props.value ? props.value : 'name';
     const [onChangeData] = useChecksInputHandler(props);
 
-    const hasDataValue = (value) => {
+    const hasDataValue = (value) => { //Set check or not to set check
         return props.checks.indexOf(value) !== -1;
     };
 

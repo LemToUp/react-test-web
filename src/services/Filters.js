@@ -33,9 +33,9 @@ function getFiltersList(ids, filters = {}) {
         }, 200);
     }).then((responce) => { //https://medium.com/webpack/webpack-4-import-and-commonjs-d619d626b655
         let data = responce.default;
-        data = data.filter(value => ids.indexOf(value.category_id) !== -1);
+        data = data.filter(value => ids.indexOf(value.category_id) !== -1); //Get only required ids
 
-        if (filters.unique) {
+        if (filters.unique) { //Unique names filter (by default)
             let uniqueName = new Set();
             data = data.filter((item) => {
                 if (uniqueName.has(item[filters.unique])) {
@@ -47,7 +47,7 @@ function getFiltersList(ids, filters = {}) {
             })
         }
 
-        if (filters.searchType && filters.search && filters.search !== '') {
+        if (filters.searchType && filters.search && filters.search !== '') { //Search word
             let regexp = undefined;
             switch (filters.searchType) {
                 case '**':
@@ -67,7 +67,7 @@ function getFiltersList(ids, filters = {}) {
                 })
             }
         }
-        if (filters.sort && filters.sort === 'A-Z') {
+        if (filters.sort && filters.sort === 'A-Z') { //Sort by names
             data = data.sort((a, b) => (a.name > b.name) ? 1 : -1);
         }
 

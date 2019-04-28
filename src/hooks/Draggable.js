@@ -31,7 +31,7 @@ export function useDraggable(defaultStyle, defaultOffset) {
         [],
     );
 
-    const onMouseMove = (e) => {
+    const onMouseMove = (e) => { //Dragging element over mouse
         if (isDraggable) {
             setStyles({
                 top: `${e.clientY - defaultOffset}px`,
@@ -41,7 +41,7 @@ export function useDraggable(defaultStyle, defaultOffset) {
         e.stopPropagation();
     };
 
-    const onMouseUp = (e) => {
+    const onMouseUp = (e) => { //Disable dragging
         if (isDraggable) {
             setDraggableState(false);
         }

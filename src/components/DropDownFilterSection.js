@@ -18,7 +18,7 @@ function DropDownFilterSection(props) {
         }
     };
 
-    const hasDataValue = (value) => {
+    const hasDataValue = (value) => { //Set check or not to set check
         return props.checks.indexOf(value) !== -1;
     };
     

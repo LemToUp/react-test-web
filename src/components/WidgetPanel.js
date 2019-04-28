@@ -12,14 +12,7 @@ function WidgetPanel(props) {
 
     useEffect(
         () => {
-            props.dispatch(filtersDataActions.initFilterSection(`filter_${props.number}`));
-        },
-        [],
-    );
-
-    useEffect(
-        () => {
-            props.dispatch(filtersDataActions.initFilterSection(`filter_${props.number}`));
+            props.dispatch(filtersDataActions.initFilterSection(`filter_${props.number}`)); //Bad decision to create filter section
         },
         [],
     );
@@ -34,7 +27,7 @@ function WidgetPanel(props) {
         toggleFilter(!isFilterShow);
     };
 
-    const onGetFilters = (data) => {
+    const onGetFilters = (data) => { //Get data from filter
         setSelectedFilters(data);
         forceUpdate(!forceUpdateVariable);
     };
