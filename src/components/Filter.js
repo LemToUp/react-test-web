@@ -6,6 +6,7 @@ import ContentFilterSection from './ContentFilterSection';
 import {connect} from 'react-redux';
 import {filtersActions} from '../actions/Filters';
 import {filtersDataActions} from '../actions/FilterData';
+import {useDraggable} from '../hooks/Draggable';
 
 export const dataTypes = {
     CONTEXT: 'CONTEXTS',
@@ -18,19 +19,10 @@ function Filter(props) {
         props.closeEvent(e);
     };
 
-    const [styles, setStyles] = useState({display: 'none'});
-    const [isDraggable, setDraggableState] = useState(false);
     const [isContextListDisplaying, setIsContextListDisplaying] = useState(false);
     const [isDimentionsListDisplaying, setIsDimentionsListDisplaying] = useState(false);
 
-    useEffect(() => { //Subscribe on mount
-        window.addEventListener('mouseup', onMouseUp);
-        window.addEventListener('mousemove', onMouseMove);
-        return function cleanup() { //Unsubscribe after dismount
-            window.removeEventListener('mouseup', onMouseUp);
-            window.removeEventListener('mousemove', onMouseMove);
-        };
-    });
+    const [styles, catchEvent] = useDraggable(props.initialPosition, 20);
 
     useEffect(
         () => {
@@ -38,40 +30,6 @@ function Filter(props) {
         },
         [],
     );
-
-    useEffect(
-        () => {
-            if (props.initialPosition) {
-                setStyles(Object.assign({display: 'block'}, props.initialPosition));
-            }
-        },
-        [],
-    );
-
-    const onMouseUp = (e) => {
-        if (isDraggable) {
-            setDraggableState(false);
-        }
-        e.stopPropagation();
-    };
-
-    const onMouseDown = (e) => {
-        e.preventDefault();
-        if (!isDraggable) {
-            setDraggableState(true);
-        }
-        e.stopPropagation();
-    };
-
-    const onMouseMove = (e) => {
-        if (isDraggable) {
-            setStyles({
-                top: `${e.clientY - 10}px`,
-                left: `${e.clientX - 10}px`
-            });
-        }
-        e.stopPropagation();
-    };
 
     const closeAllLists = () => {
         setIsContextListDisplaying(false);
@@ -190,7 +148,7 @@ function Filter(props) {
             <div className="Filter-modal container" style={styles}>
                 <div className="Filter-modal-header row p-1">
                     <div className="col-2 px-1 pt-1">
-                        <i className="material-icons draggable" onMouseDown={onMouseDown}>drag_indicator</i>
+                        <i className="material-icons draggable" onMouseDown={catchEvent}>drag_indicator</i>
                     </div>
                     <span className="col-8">FILTERS</span>
                     <span className="Filter-close-icon col-2 pt-1 text-right">

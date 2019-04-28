@@ -1,43 +1,15 @@
-import React, {useState, useEffect} from 'react';
+import React from 'react';
 import '../styles/ContentFilterSection.scss';
+import {useChecksInputHandler} from '../hooks/ChecksInputHandler';
 
 function DropDownFilterSection(props) {
 
-    const [forceUpdateVariable, forceUpdate] = useState(false);
     const key = props.key ? props.key : 'id';
     const value = props.value ? props.value : 'name';
-
-    useEffect(
-        () => {
-            if (!props.checks && props.onSendCheckedData) {
-                props.onSendCheckedData([]);
-            }
-        },
-        [],
-    );
+    const [onChangeData] = useChecksInputHandler(props);
 
     const hasDataValue = (value) => {
         return props.checks.indexOf(value) !== -1;
-    };
-
-    const onChangeData = (e) => {
-        if (e.target.checked) {
-            props.checks.push(Number.parseInt(e.target.value));
-            e.target.checked = true;
-        } else {
-            const index = props.checks.indexOf(Number.parseInt(e.target.value));
-            if (index !== -1) {
-                props.checks.splice(index, 1);
-            }
-            e.target.checked = false;
-        }
-        forceUpdate(!forceUpdateVariable); //Force update analoque
-
-        if (props.onSendCheckedData) {
-            props.onSendCheckedData(props.checks);
-        }
-
-        e.stopPropagation(true);
     };
 
     const renderList = (data) => {
@@ -58,7 +30,7 @@ function DropDownFilterSection(props) {
                                         value={item[key]}
                                         name={item[key]}
                                         checked={hasDataValue(item[key]) ? true : undefined}
-                                        onChange={onChangeData}
+                                        onChange={onChangeData.bind(this, props)}
                                         className="mx-1"
                                     />
                                     {item[value]}

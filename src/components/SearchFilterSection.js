@@ -34,12 +34,12 @@ function DropDownFilterSection(props) {
     );
 
     const toggleIsShowPopup = (e) => {
-        e.stopPropagation(true);
+        e.stopPropagation();
         setIsShowPopup(!isShowPopup);
     };
 
     const changeCurrentFilter = (filterName, e) => {
-        e.stopPropagation(true);
+        e.stopPropagation();
         sendFiltersToParent({searchType: filterName});
         setIsShowPopup(!isShowPopup);
     };
@@ -51,23 +51,23 @@ function DropDownFilterSection(props) {
     };
 
     const onChangeSearchPhrase = (e) => {
-        e.stopPropagation(true);
+        e.stopPropagation();
         setSearchPhrase(e.target.value);
     };
 
     const onOrderToggle = (e) => {
-        e.stopPropagation(true);
+        e.stopPropagation();
         sendFiltersToParent({sort: props.sortData.sort ? undefined : orderFilterConstants.ORDER_FILTER_ALPHABETICAL_UP});
         forceUpdate(!forceUpdateVariable);
     };
 
     const onSendSearchPhrase = (e) => {
-        e.stopPropagation(true);
+        e.stopPropagation();
         sendFiltersToParent({search: searchPhrase});
     };
 
     const onInputKeyUp = (e) => {
-        e.stopPropagation(true);
+        e.stopPropagation();
         if (e.key === 'Enter') {
             sendFiltersToParent({search: searchPhrase});
         }
