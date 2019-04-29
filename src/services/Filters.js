@@ -9,7 +9,7 @@ export {seachFilterConstants} from '../components/SearchFilterSection'
 function getContextsList() {
     return new Promise(resolve => {
         return setTimeout(() => {
-            return resolve(import ('../data/contexts'));
+            return resolve(import (`${process.env.REACT_APP_REQUEST_PATH}/contexts`));
         }, 200);
     }).then((data) => { //https://medium.com/webpack/webpack-4-import-and-commonjs-d619d626b655
         return data.default;
@@ -19,7 +19,7 @@ function getContextsList() {
 function getDimentionsList(ids) {
     return new Promise(resolve => {
         return setTimeout(() => {
-            return resolve(import ('../data/categories'));
+            return resolve(import (`${process.env.REACT_APP_REQUEST_PATH}/categories`));
         }, 200);
     }).then((data) => { //https://medium.com/webpack/webpack-4-import-and-commonjs-d619d626b655
         return data.default.filter(value => ids.indexOf(value.section_id) !== -1);
@@ -29,7 +29,7 @@ function getDimentionsList(ids) {
 function getFiltersList(ids, filters = {}) {
     return new Promise(resolve => {
         return setTimeout(() => {
-            return resolve(import ('../data/filters'));
+            return resolve(import (`${process.env.REACT_APP_REQUEST_PATH}/filters`));
         }, 200);
     }).then((responce) => { //https://medium.com/webpack/webpack-4-import-and-commonjs-d619d626b655
         let data = responce.default;
