@@ -14,7 +14,7 @@ export const dataTypes = {
     FILTERS: 'FILTERS',
 };
 
-function Filter(props) {
+export function Filter(props) {
     const onClose = (e) => {
         props.closeEvent(e);
     };
@@ -68,7 +68,7 @@ function Filter(props) {
     };
 
     const getDimentions = (ids) => {
-        props.dispatch(filtersActions.getDimentions([...ids])) //Get Dimentions depends on Context ids
+        props.getDimentionsFromState([...ids]) //Get Dimentions depends on Context ids
             .then((action) => {
                 storeFilterData(dataTypes.DIMENTIONS, action.data);
                 if (props.filters && props.filters.length > 0) { //Recalculate filters on Dimention changes
@@ -83,7 +83,7 @@ function Filter(props) {
     const getFilters = (ids = new Set(), dimentionsData = undefined) => {
         let dimentions = dimentionsData ? dimentionsData : props.filterDimentions; //For the async cases
         const actualIds = excludeMissingIds(ids, dimentions);
-        props.dispatch(filtersActions.getFilters([...actualIds], props.sortRules)).then((action) => {  //Get Filters depends on Dimentions ids
+        props.getFiltersFromState([...actualIds], props.sortRules).then((action) => {  //Get Filters depends on Dimentions ids
             storeFilterData(dataTypes.FILTERS, action.data);
             sendFiltersListToWidget(action.data, props.filterFiltersChecks);
             return action;
@@ -99,7 +99,7 @@ function Filter(props) {
     };
 
     const onGetSortRules = (filters) => {
-        props.dispatch(filtersDataActions.setSortRulesByFilter(props.name, filters));
+        props.setSortRules(filters);
         if (props.filterDimentionsChecks && props.filterDimentionsChecks.length > 0) {
             getFilters(new Set(props.filterDimentionsChecks));
         }
@@ -109,8 +109,8 @@ function Filter(props) {
         if (props.onGetData && filters && checks) {
             props.onGetData(
                 filters
-                    .filter((filter =>checks.indexOf(filter.id) !== -1))
-                    .map((filter) => filter.name)
+                    .filter((filter => checks.indexOf(filter.id) !== -1))
+                    .map((filter) => filter.name),
             );
         }
     };
@@ -118,13 +118,13 @@ function Filter(props) {
     const storeCheckedData = (type, checks) => {
         switch (type) {
             case dataTypes.CONTEXT:
-                props.dispatch(filtersDataActions.setContextsChecksByFilter(props.name, checks));
+                props.setContextsChecks(checks);
                 break;
             case dataTypes.DIMENTIONS:
-                props.dispatch(filtersDataActions.setDimentionsChecksByFilter(props.name, checks));
+                props.setDimentionsChecks(checks);
                 break;
             case dataTypes.FILTERS:
-                props.dispatch(filtersDataActions.setFiltersChecksByFilter(props.name, checks));
+                props.setFiltersChecks(checks);
                 sendFiltersListToWidget(props.filterFilters, props.filterFiltersChecks);
                 break;
             default:
@@ -134,13 +134,13 @@ function Filter(props) {
     const storeFilterData = (type, data) => {
         switch (type) {
             case dataTypes.CONTEXT:
-                props.dispatch(filtersDataActions.setContextsDataByFilter(props.name, data));
+                props.setContexts(data);
                 break;
             case dataTypes.DIMENTIONS:
-                props.dispatch(filtersDataActions.setDimentionsDataByFilter(props.name, data));
+                props.setDimentions(data);
                 break;
             case dataTypes.FILTERS:
-                props.dispatch(filtersDataActions.setFiltersDataByFilter(props.name, data));
+                props.setFilters(data);
                 break;
             default:
         }
@@ -203,7 +203,7 @@ function mapStateToProps(state, ownProps) {
         filterDimentionsChecks,
         filterFilters,
         filterFiltersChecks,
-        sortRules
+        sortRules,
     } = state.filterData[ownProps.name];
     return {
         contexts,
@@ -216,9 +216,23 @@ function mapStateToProps(state, ownProps) {
         filterFilters,
         filterFiltersChecks,
         sortRules,
-    }
+    };
 }
 
-const ConnectedFilter = connect(mapStateToProps)(Filter);
+function mapDispatchToProps(dispatch, ownProps) {
+    return {
+        setContexts: (data) => dispatch(filtersDataActions.setContextsDataByFilter(ownProps.name, data)),
+        setContextsChecks: (checks) => dispatch(filtersDataActions.setContextsChecksByFilter(ownProps.name, checks)),
+        setDimentions: (data) => dispatch(filtersDataActions.setDimentionsDataByFilter(ownProps.name, data)),
+        setDimentionsChecks: (checks) => dispatch(filtersDataActions.setDimentionsChecksByFilter(ownProps.name, checks)),
+        setFilters: (data) => dispatch(filtersDataActions.setFiltersDataByFilter(ownProps.name, data)),
+        setFiltersChecks: (checks) => dispatch(filtersDataActions.setFiltersChecksByFilter(ownProps.name, checks)),
+        getDimentionsFromState: (ids) => dispatch(filtersActions.getDimentions([...ids])),
+        getFiltersFromState: (ids, rules) => dispatch(filtersActions.getFilters([...ids], rules)),
+        setSortRules: (filters) => dispatch(filtersDataActions.setSortRulesByFilter(ownProps.name, filters))
+    };
+};
+
+const ConnectedFilter = connect(mapStateToProps, mapDispatchToProps)(Filter);
 
 export default ConnectedFilter;
