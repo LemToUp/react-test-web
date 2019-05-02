@@ -1,0 +1,23 @@
+@import './_colors.scss';
+
+.btn-circle {
+  background-color: $color-react-blue-color;
+  color: #fff;
+  border-radius: 2.5rem;
+  padding: 0.5rem;
+  cursor: pointer;
+  transition: 0.3s;
+}
+
+.btn-circle:hover {
+  background-color: #fff;
+  color: $color-react-blue-color;
+}
+
+.pointer {
+  cursor: pointer;
+}
+
+.draggable {
+  cursor: move;
+}

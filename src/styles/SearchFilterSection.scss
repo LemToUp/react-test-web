@@ -1,0 +1,46 @@
+@import './_colors.scss';
+
+.Search-filter-section {
+  .input-group-text {
+    background-color: $filter-grey-color;
+    height: 2rem;
+  }
+
+  .form-control {
+    background-color: $filter-grey-color;
+    color: $filter-grey-light-color;
+    height: 2rem;
+    caret-color: #fff;
+  }
+
+  .form-control:focus {
+    color: #fff;
+  }
+
+  i {
+    color: #fff;
+  }
+
+  .btn-secondary {
+    background-color: $filter-grey-color;
+  }
+
+  .btn-group {
+    .dropdown-menu {
+      min-width: auto;
+      padding: 0;
+      background-color: $filter-grey-color;
+      .dropdown-item {
+        color: #fff;
+        border-bottom: 1px solid $filter-grey-light-color;
+        transition: 0.3s;
+      }
+      .dropdown-item:hover {
+        background-color: $filter-dark-color;
+      }
+      .dropdown-item:focus {
+        background-color: $filter-dark-color;
+      }
+    }
+  }
+}

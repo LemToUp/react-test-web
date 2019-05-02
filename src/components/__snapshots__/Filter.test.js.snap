@@ -1,0 +1,648 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`Select contexts 1`] = `
+<div
+  className="Filter-modal-wrapper"
+>
+  <div
+    className="Filter-modal container"
+    style={
+      Object {
+        "display": "none",
+      }
+    }
+  >
+    <div
+      className="Filter-modal-header row p-1"
+    >
+      <div
+        className="col-2 px-1 pt-1"
+      >
+        <i
+          className="material-icons draggable"
+          onMouseDown={[Function]}
+        >
+          drag_indicator
+        </i>
+      </div>
+      <span
+        className="col-8"
+      >
+        FILTERS
+      </span>
+      <span
+        className="Filter-close-icon col-2 pt-1 text-right"
+      >
+        <i
+          className="material-icons pointer"
+          onClick={[Function]}
+        >
+          close
+        </i>
+      </span>
+    </div>
+    <div
+      className="Filter-modal-body row align-items-end"
+    >
+      <div
+        className="Filter-section Drop-down-section col-md-10 offset-md-2 p-1"
+      >
+        <p>
+          <i
+            className="material-icons pointer p-1"
+            onClick={[Function]}
+          >
+            expand_more
+          </i>
+          <span
+            className="Drop-down-section-title mr-2"
+          >
+            CONTEXTS
+          </span>
+          <span
+            className="Drop-down-section-row"
+          >
+            
+          </span>
+        </p>
+        <div
+          className="Drop-down-modal d-none"
+        />
+      </div>
+      <div
+        className="Filter-section Drop-down-section col-md-10 offset-md-2 p-1"
+      >
+        <p>
+          <i
+            className="material-icons pointer p-1"
+            onClick={[Function]}
+          >
+            expand_more
+          </i>
+          <span
+            className="Drop-down-section-title mr-2"
+          >
+            DIMENTIONS
+          </span>
+          <span
+            className="Drop-down-section-row"
+          >
+            
+          </span>
+        </p>
+        <div
+          className="Drop-down-modal d-none"
+        />
+      </div>
+      <div
+        className="Filter-section Search-filter-section col-md-10 offset-md-2 p-2"
+      >
+        <div
+          className="input-group mb-1"
+        >
+          <div
+            className="input-group-prepend"
+          >
+            <span
+              className="input-group-text p-1"
+            >
+              <i
+                className="material-icons pointer"
+                onClick={[Function]}
+              >
+                search
+              </i>
+            </span>
+          </div>
+          <input
+            className="form-control p-1"
+            onChange={[Function]}
+            onKeyPress={[Function]}
+            type="text"
+          />
+        </div>
+        <div
+          aria-label="..."
+          className="btn-group btn-group-sm"
+          role="group"
+        >
+          <button
+            className="btn btn-secondary "
+            onClick={[Function]}
+            type="button"
+          >
+            A-Z
+          </button>
+          <div
+            className="btn-group btn-group-sm"
+            role="group"
+          >
+            <button
+              className="btn btn-secondary"
+              onClick={[Function]}
+              type="button"
+            >
+              
+            </button>
+            <div
+              aria-labelledby="btnGroupDrop1"
+              className="dropdown-menu mt-0"
+              style={
+                Object {
+                  "display": "none",
+                }
+              }
+            >
+              <button
+                className="dropdown-item py-1 px-2"
+                onClick={[Function]}
+              >
+                **
+              </button>
+              <button
+                className="dropdown-item py-1 px-2"
+                onClick={[Function]}
+              >
+                *_
+              </button>
+              <button
+                className="dropdown-item py-1 px-2"
+                onClick={[Function]}
+              >
+                ""
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div
+        className="Filter-section Content-filter-section col-md-10 offset-md-2 p-1"
+      />
+    </div>
+  </div>
+</div>
+`;
+
+exports[`Select contexts 2`] = `
+<div
+  className="Filter-modal-wrapper"
+>
+  <div
+    className="Filter-modal container"
+    style={
+      Object {
+        "display": "none",
+      }
+    }
+  >
+    <div
+      className="Filter-modal-header row p-1"
+    >
+      <div
+        className="col-2 px-1 pt-1"
+      >
+        <i
+          className="material-icons draggable"
+          onMouseDown={[Function]}
+        >
+          drag_indicator
+        </i>
+      </div>
+      <span
+        className="col-8"
+      >
+        FILTERS
+      </span>
+      <span
+        className="Filter-close-icon col-2 pt-1 text-right"
+      >
+        <i
+          className="material-icons pointer"
+          onClick={[Function]}
+        >
+          close
+        </i>
+      </span>
+    </div>
+    <div
+      className="Filter-modal-body row align-items-end"
+    >
+      <div
+        className="Filter-section Drop-down-section col-md-10 offset-md-2 p-1"
+      >
+        <p>
+          <i
+            className="material-icons pointer p-1"
+            onClick={[Function]}
+          >
+            expand_more
+          </i>
+          <span
+            className="Drop-down-section-title mr-2"
+          >
+            CONTEXTS
+          </span>
+          <span
+            className="Drop-down-section-row"
+          >
+            
+          </span>
+        </p>
+        <div
+          className="Drop-down-modal d-none"
+        >
+          <ul
+            className="list-group pr-5"
+          >
+            <li
+              className="p-1"
+            >
+              <div
+                className="form-check"
+              >
+                <input
+                  className="form-check-input"
+                  id="0.6295889167233539_0"
+                  name={1}
+                  onChange={[Function]}
+                  type="checkbox"
+                  value={1}
+                />
+                <label
+                  className="form-check-label"
+                  htmlFor="0.6295889167233539_0"
+                >
+                  Test Story
+                </label>
+              </div>
+            </li>
+            <li
+              className="p-1"
+            >
+              <div
+                className="form-check"
+              >
+                <input
+                  className="form-check-input"
+                  id="0.6295889167233539_1"
+                  name={2}
+                  onChange={[Function]}
+                  type="checkbox"
+                  value={2}
+                />
+                <label
+                  className="form-check-label"
+                  htmlFor="0.6295889167233539_1"
+                >
+                  Editor
+                </label>
+              </div>
+            </li>
+          </ul>
+        </div>
+      </div>
+      <div
+        className="Filter-section Drop-down-section col-md-10 offset-md-2 p-1"
+      >
+        <p>
+          <i
+            className="material-icons pointer p-1"
+            onClick={[Function]}
+          >
+            expand_more
+          </i>
+          <span
+            className="Drop-down-section-title mr-2"
+          >
+            DIMENTIONS
+          </span>
+          <span
+            className="Drop-down-section-row"
+          >
+            
+          </span>
+        </p>
+        <div
+          className="Drop-down-modal d-none"
+        />
+      </div>
+      <div
+        className="Filter-section Search-filter-section col-md-10 offset-md-2 p-2"
+      >
+        <div
+          className="input-group mb-1"
+        >
+          <div
+            className="input-group-prepend"
+          >
+            <span
+              className="input-group-text p-1"
+            >
+              <i
+                className="material-icons pointer"
+                onClick={[Function]}
+              >
+                search
+              </i>
+            </span>
+          </div>
+          <input
+            className="form-control p-1"
+            onChange={[Function]}
+            onKeyPress={[Function]}
+            type="text"
+          />
+        </div>
+        <div
+          aria-label="..."
+          className="btn-group btn-group-sm"
+          role="group"
+        >
+          <button
+            className="btn btn-secondary "
+            onClick={[Function]}
+            type="button"
+          >
+            A-Z
+          </button>
+          <div
+            className="btn-group btn-group-sm"
+            role="group"
+          >
+            <button
+              className="btn btn-secondary"
+              onClick={[Function]}
+              type="button"
+            >
+              **
+            </button>
+            <div
+              aria-labelledby="btnGroupDrop1"
+              className="dropdown-menu mt-0"
+              style={
+                Object {
+                  "display": "none",
+                }
+              }
+            >
+              <button
+                className="dropdown-item py-1 px-2"
+                onClick={[Function]}
+              >
+                **
+              </button>
+              <button
+                className="dropdown-item py-1 px-2"
+                onClick={[Function]}
+              >
+                *_
+              </button>
+              <button
+                className="dropdown-item py-1 px-2"
+                onClick={[Function]}
+              >
+                ""
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div
+        className="Filter-section Content-filter-section col-md-10 offset-md-2 p-1"
+      />
+    </div>
+  </div>
+</div>
+`;
+
+exports[`renders without crashing 1`] = `
+<div
+  className="Filter-modal-wrapper"
+>
+  <div
+    className="Filter-modal container"
+    style={
+      Object {
+        "display": "none",
+      }
+    }
+  >
+    <div
+      className="Filter-modal-header row p-1"
+    >
+      <div
+        className="col-2 px-1 pt-1"
+      >
+        <i
+          className="material-icons draggable"
+          onMouseDown={[Function]}
+        >
+          drag_indicator
+        </i>
+      </div>
+      <span
+        className="col-8"
+      >
+        FILTERS
+      </span>
+      <span
+        className="Filter-close-icon col-2 pt-1 text-right"
+      >
+        <i
+          className="material-icons pointer"
+          onClick={[Function]}
+        >
+          close
+        </i>
+      </span>
+    </div>
+    <div
+      className="Filter-modal-body row align-items-end"
+    >
+      <div
+        className="Filter-section Drop-down-section col-md-10 offset-md-2 p-1"
+      >
+        <p>
+          <i
+            className="material-icons pointer p-1"
+            onClick={[Function]}
+          >
+            expand_more
+          </i>
+          <span
+            className="Drop-down-section-title mr-2"
+          >
+            CONTEXTS
+          </span>
+          <span
+            className="Drop-down-section-row"
+          >
+            
+          </span>
+        </p>
+        <div
+          className="Drop-down-modal d-none"
+        >
+          <ul
+            className="list-group pr-5"
+          >
+            <li
+              className="p-1"
+            >
+              <div
+                className="form-check"
+              >
+                <input
+                  className="form-check-input"
+                  id="0.33806233188690493_0"
+                  name={1}
+                  onChange={[Function]}
+                  type="checkbox"
+                  value={1}
+                />
+                <label
+                  className="form-check-label"
+                  htmlFor="0.33806233188690493_0"
+                >
+                  Test Story
+                </label>
+              </div>
+            </li>
+            <li
+              className="p-1"
+            >
+              <div
+                className="form-check"
+              >
+                <input
+                  className="form-check-input"
+                  id="0.33806233188690493_1"
+                  name={2}
+                  onChange={[Function]}
+                  type="checkbox"
+                  value={2}
+                />
+                <label
+                  className="form-check-label"
+                  htmlFor="0.33806233188690493_1"
+                >
+                  Editor
+                </label>
+              </div>
+            </li>
+          </ul>
+        </div>
+      </div>
+      <div
+        className="Filter-section Drop-down-section col-md-10 offset-md-2 p-1"
+      >
+        <p>
+          <i
+            className="material-icons pointer p-1"
+            onClick={[Function]}
+          >
+            expand_more
+          </i>
+          <span
+            className="Drop-down-section-title mr-2"
+          >
+            DIMENTIONS
+          </span>
+          <span
+            className="Drop-down-section-row"
+          >
+            
+          </span>
+        </p>
+        <div
+          className="Drop-down-modal d-none"
+        />
+      </div>
+      <div
+        className="Filter-section Search-filter-section col-md-10 offset-md-2 p-2"
+      >
+        <div
+          className="input-group mb-1"
+        >
+          <div
+            className="input-group-prepend"
+          >
+            <span
+              className="input-group-text p-1"
+            >
+              <i
+                className="material-icons pointer"
+                onClick={[Function]}
+              >
+                search
+              </i>
+            </span>
+          </div>
+          <input
+            className="form-control p-1"
+            onChange={[Function]}
+            onKeyPress={[Function]}
+            type="text"
+          />
+        </div>
+        <div
+          aria-label="..."
+          className="btn-group btn-group-sm"
+          role="group"
+        >
+          <button
+            className="btn btn-secondary "
+            onClick={[Function]}
+            type="button"
+          >
+            A-Z
+          </button>
+          <div
+            className="btn-group btn-group-sm"
+            role="group"
+          >
+            <button
+              className="btn btn-secondary"
+              onClick={[Function]}
+              type="button"
+            >
+              **
+            </button>
+            <div
+              aria-labelledby="btnGroupDrop1"
+              className="dropdown-menu mt-0"
+              style={
+                Object {
+                  "display": "none",
+                }
+              }
+            >
+              <button
+                className="dropdown-item py-1 px-2"
+                onClick={[Function]}
+              >
+                **
+              </button>
+              <button
+                className="dropdown-item py-1 px-2"
+                onClick={[Function]}
+              >
+                *_
+              </button>
+              <button
+                className="dropdown-item py-1 px-2"
+                onClick={[Function]}
+              >
+                ""
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div
+        className="Filter-section Content-filter-section col-md-10 offset-md-2 p-1"
+      />
+    </div>
+  </div>
+</div>
+`;
