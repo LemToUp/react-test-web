@@ -1,4 +1,4 @@
-import React from 'react';
+import React, {useState} from 'react';
 import '../styles/ContentFilterSection.scss';
 import {useChecksInputHandler} from '../hooks/ChecksInputHandler';
 
@@ -6,7 +6,13 @@ function DropDownFilterSection(props) {
 
     const key = props.key ? props.key : 'id';
     const value = props.value ? props.value : 'name';
-    const [onChangeData] = useChecksInputHandler(props);
+    const className = props.className ? props.className : '';
+    const [changeData] = useChecksInputHandler(props);
+    const [uniqueName] = useState((props.name ? props.name : `unique_${Math.random()}`));
+
+    const onChangeData = function (e) {
+        changeData(props, e);
+    };
 
     const hasDataValue = (value) => { //Set check or not to set check
         return props.checks.indexOf(value) !== -1;
@@ -14,23 +20,21 @@ function DropDownFilterSection(props) {
 
     const renderList = (data) => {
         if (Array.isArray(data) && data.length > 0) {
-            const uniqueId = Math.random();
             return <ul className="list-group">
                 {data.map((item, i) => (
-                        <li key={`li_${uniqueId}_${i}`}>
+                        <li key={`li_${uniqueName}_${i}`}>
                             <div className="checkbox">
                                 <label
-                                    htmlFor={`${uniqueId}_${i}`}
-                                    key={`label_${uniqueId}_${i}`}
+                                    htmlFor={`${uniqueName}_${i}`}
                                     className="pointer"
                                 >
                                     <input
                                         type="checkbox"
-                                        id={`${uniqueId}_${i}`}
+                                        id={`${uniqueName}_${i}`}
                                         value={item[key]}
                                         name={item[key]}
-                                        checked={hasDataValue(item[key]) ? true : undefined}
-                                        onChange={onChangeData.bind(this, props)}
+                                        checked={hasDataValue(item[key])}
+                                        onChange={onChangeData}
                                         className="mx-1"
                                     />
                                     {item[value]}
@@ -44,7 +48,7 @@ function DropDownFilterSection(props) {
     };
 
     return (
-        <div className={`Filter-section Content-filter-section ${props.className ? props.className : ''}`}>
+        <div className={`Filter-section Content-filter-section ${className}`}>
             {renderList(props.data)}
         </div>
     );

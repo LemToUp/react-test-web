@@ -6,7 +6,7 @@ function DropDownFilterSection(props) {
 
     const key = props.key ? props.key : 'id';
     const value = props.value ? props.value : 'name';
-    const [onChangeData, checkedDataString] = useChecksInputHandler(props);
+    const [changeData, checkedDataString] = useChecksInputHandler(props);
 
     const toggleDropDown = (e) => {
         e.stopPropagation();
@@ -20,6 +20,10 @@ function DropDownFilterSection(props) {
 
     const hasDataValue = (value) => { //Set check or not to set check
         return props.checks.indexOf(value) !== -1;
+    };
+
+    const onChangeData = function (e) {
+        changeData(props, e);
     };
     
     const renderList = (data) => {
@@ -35,8 +39,8 @@ function DropDownFilterSection(props) {
                             id={`${uniqueId}_${i}`}
                             value={item[key]}
                             name={item[key]}
-                            checked={hasDataValue(item[key]) ? true : undefined}
-                            onChange={onChangeData.bind(this, props)}
+                            checked={hasDataValue(item[key])}
+                            onChange={onChangeData}
                         />
                             <label
                                 className="form-check-label"

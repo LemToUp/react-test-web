@@ -2,7 +2,10 @@ import { filtersConstants } from '../constants/Filters';
 
 export function filters(state = {}, action) {
     switch (action.type) {
-        case filtersConstants.GET_CONTEXTS_LIST:
+        case filtersConstants.CONTEXTS_LIST_REQUESTED:
+            return Object.assign({}, state);
+        case filtersConstants.CONTEXTS_LIST_SUCCEEDED:
+            debugger;
             return Object.assign({}, state, {contexts: action.data});
         case filtersConstants.GET_DIMENTIONS_LIST:
             return Object.assign({}, state, {dimentions: action.data});

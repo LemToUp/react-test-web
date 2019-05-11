@@ -1,21 +1,12 @@
 import React, {useState, useEffect} from 'react';
 import '../styles/SearchFilterSection.scss';
-
-export const seachFilterConstants = {
-    SEARCH_FILTER_COMPARE_FULL: '**',
-    SEARCH_FILTER_COMPARE_PARTICAL: '*_',
-    SEARCH_FILTER_COMPARE_BEGINNING_FROM: '""',
-};
-
-export const orderFilterConstants = {
-    ORDER_FILTER_ALPHABETICAL_UP: 'A-Z',
-};
+import {seachFilterConstants, orderFilterConstants} from '../constants/Filters'
 
 const defaultSortDataValue = {
     searchType: seachFilterConstants.SEARCH_FILTER_COMPARE_FULL,
-    search: undefined,
-    sort: undefined,
-    unique: 'name'
+    search: null,
+    sort: null,
+    unique: 'name',
 };
 
 function DropDownFilterSection(props) {
@@ -44,9 +35,21 @@ function DropDownFilterSection(props) {
         setIsShowPopup(!isShowPopup);
     };
 
+    const onToggleCompareFullFilter = (e) => {
+        changeCurrentFilter(seachFilterConstants.SEARCH_FILTER_COMPARE_FULL, e);
+    };
+
+    const onToggleCompareParticalFilter = (e) => {
+        changeCurrentFilter(seachFilterConstants.SEARCH_FILTER_COMPARE_PARTICAL, e);
+    };
+
+    const onToggleBegginingFromFilter = (e) => {
+        changeCurrentFilter(seachFilterConstants.SEARCH_FILTER_COMPARE_BEGINNING_FROM, e);
+    };
+
     const sendFiltersToParent = (filters) => {
         if (props.onSendData && props.sortData) {
-            props.onSendData(Object.assign(props.sortData, filters));
+            props.onSendData({...props.sortData, ...filters});
         }
     };
 
@@ -108,11 +111,11 @@ function DropDownFilterSection(props) {
                     <div className="dropdown-menu mt-0" aria-labelledby="btnGroupDrop1"
                          style={{display: isShowPopup ? 'block' : 'none'}}>
                         <button className="dropdown-item py-1 px-2"
-                                onClick={changeCurrentFilter.bind(this, seachFilterConstants.SEARCH_FILTER_COMPARE_FULL)}>{seachFilterConstants.SEARCH_FILTER_COMPARE_FULL}</button>
+                                onClick={onToggleCompareFullFilter}>{seachFilterConstants.SEARCH_FILTER_COMPARE_FULL}</button>
                         <button className="dropdown-item py-1 px-2"
-                                onClick={changeCurrentFilter.bind(this, seachFilterConstants.SEARCH_FILTER_COMPARE_PARTICAL)}>{seachFilterConstants.SEARCH_FILTER_COMPARE_PARTICAL}</button>
+                                onClick={onToggleCompareParticalFilter}>{seachFilterConstants.SEARCH_FILTER_COMPARE_PARTICAL}</button>
                         <button className="dropdown-item py-1 px-2"
-                                onClick={changeCurrentFilter.bind(this, seachFilterConstants.SEARCH_FILTER_COMPARE_BEGINNING_FROM)}>{seachFilterConstants.SEARCH_FILTER_COMPARE_BEGINNING_FROM}</button>
+                                onClick={onToggleBegginingFromFilter}>{seachFilterConstants.SEARCH_FILTER_COMPARE_BEGINNING_FROM}</button>
                     </div>
                 </div>
             </div>

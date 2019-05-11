@@ -4,9 +4,7 @@ export const filtersService = {
     getFiltersList,
 };
 
-export {seachFilterConstants} from '../components/SearchFilterSection'
-
-function getContextsList() {
+/*function getContextsList() {
     return new Promise(resolve => {
         return setTimeout(() => {
             return resolve(import (`${process.env.REACT_APP_REQUEST_PATH}/contexts`));
@@ -14,6 +12,12 @@ function getContextsList() {
     }).then((data) => { //https://medium.com/webpack/webpack-4-import-and-commonjs-d619d626b655
         return data.default;
     });
+}*/
+
+async function getContextsList() {
+    await setTimeout(() => {
+        return import (`${process.env.REACT_APP_REQUEST_PATH}/contexts`);
+    }, 200);
 }
 
 function getDimentionsList(ids) {

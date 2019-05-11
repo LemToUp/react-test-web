@@ -17,7 +17,9 @@ export const dataTypes = {
 
 export function Filter(props) {
     const onClose = (e) => {
-        props.closeEvent(e);
+        if (props.closeEvent) {
+            props.closeEvent(e);
+        }
     };
 
     const [isContextListDisplaying, setIsContextListDisplaying] = useState(false);
@@ -82,28 +84,33 @@ export function Filter(props) {
 
     const sendFiltersListToWidget = (filters, checks) => {
         if (props.onGetData && filters && checks) {
-            props.onGetData(
-                filters
-                    .filter((filter => checks.indexOf(filter.id) !== -1))
-                    .map((filter) => filter.name),
-            );
+            const checkedFilters = filters.filter((filter => checks.indexOf(filter.id) !== -1)).map((filter) => filter.name);
+            props.onGetData(checkedFilters);
         }
     };
 
     const storeCheckedData = (type, data) => {
         switch (type) {
             case dataTypes.CONTEXT:
-                props.setContextsChecks(data);
+                if (props.setContextsChecks) {
+                    props.setContextsChecks(data);
+                }
                 break;
             case dataTypes.DIMENTIONS:
-                props.setDimentionsChecks(data);
+                if (props.setDimentionsChecks) {
+                    props.setDimentionsChecks(data);
+                }
                 break;
             case dataTypes.FILTERS:
-                props.setFiltersChecks(data);
+                if (props.setFiltersChecks) {
+                    props.setFiltersChecks(data);
+                }
                 sendFiltersListToWidget(props.filterFilters, props.filterFiltersChecks);
                 break;
             case dataTypes.SORT:
-                props.setSortRules(data);
+                if (props.setSortRules) {
+                    props.setSortRules(data);
+                }
                 break;
             default:
         }
@@ -112,13 +119,19 @@ export function Filter(props) {
     const storeFilterData = (type, data) => {
         switch (type) {
             case dataTypes.CONTEXT:
-                props.setContexts(data);
+                if (props.setContexts) {
+                    props.setContexts(data);
+                }
                 break;
             case dataTypes.DIMENTIONS:
-                props.setDimentions(data);
+                if (props.setDimentions) {
+                    props.setDimentions(data);
+                }
                 break;
             case dataTypes.FILTERS:
-                props.setFilters(data);
+                if (props.setFilters) {
+                    props.setFilters(data);
+                }
                 break;
             default:
         }
@@ -126,11 +139,11 @@ export function Filter(props) {
 
     const recalculateData = (type, checks) => {
         storeCheckedData(type, checks);
-        if (props.filterContextsChecks) {
+        if (props.filterContextsChecks && props.getDimentionsFromState) {
             return props.getDimentionsFromState(props.filterContextsChecks)
                 .then((getDimentionsAction) => {
                     storeFilterData(dataTypes.DIMENTIONS, getDimentionsAction.data);
-                    if (props.filterDimentionsChecks) {
+                    if (props.filterDimentionsChecks && props.getFiltersFromState) {
                         const ids = excludeMissingIds(props.filterDimentionsChecks, getDimentionsAction.data);
                         props.getFiltersFromState([...ids], props.sortRules)
                             .then(getFiltersAction => {
@@ -184,6 +197,7 @@ export function Filter(props) {
                         onSendCheckedData={onGetFilters}
                         checks={props.filterFiltersChecks}
                         className="col-md-10 offset-md-2 p-1"
+                        name={props.name}
                     />
                 </div>
             </div>

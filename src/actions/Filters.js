@@ -8,11 +8,21 @@ export const filtersActions = {
 };
 
 function getContexts() {
-    return dispatch => {
+    return {type: filtersConstants.CONTEXTS_LIST_REQUESTED}
+    /*return dispatch => {
         return filtersService.getContextsList().then((data)=> {
             return dispatch({type: filtersConstants.GET_CONTEXTS_LIST, data});
         });
-    }
+    }*/
+}
+
+function setContexts() {
+    return {type: filtersConstants.GET_CONTEXTS_LIST}
+    /*return dispatch => {
+        return filtersService.getContextsList().then((data)=> {
+            return dispatch({type: filtersConstants.GET_CONTEXTS_LIST, data});
+        });
+    }*/
 }
 
 function getDimentions(ids) {

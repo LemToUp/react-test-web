@@ -36,7 +36,7 @@ function WidgetPanel(props) {
         if (Array.isArray(data) && data.length > 0) {
             return <ul className="list-group m-2 p-1">
                 {data.map((filterName, i) => (
-                        <li key={i}>
+                        <li key={`sected_filters_${i}`}>
                             <p className="mb-0">{filterName}</p>
                         </li>
                     )
@@ -63,7 +63,7 @@ function WidgetPanel(props) {
                         onGetData={onGetFilters}
                         name={`filter_${props.number}`}
                         initialPosition={initialFilterCoordinates}
-                    /> : undefined}
+                    /> : null}
             </div>
         </section>
     );
