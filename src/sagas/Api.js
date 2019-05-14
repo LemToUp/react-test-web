@@ -1,44 +1,52 @@
-import { call, put, takeEvery} from 'redux-saga/effects'
-import { filtersConstants } from '../constants/Filters';
-import  { filtersService } from '../services/Filters'
+import {all, call, put, takeEvery, takeLatest} from 'redux-saga/effects';
+import {filtersConstants} from '../constants/Filters';
+import {filterDataConstants} from '../constants/FilterData';
+import {filtersService} from '../services/Filters';
 
-export function* getContextsSaga() {
-    yield takeEvery(filtersConstants.GET_CONTEXTS_LIST, fetchContexts);
+export function* contextsWatcherSaga() {
+    yield takeLatest(filtersConstants.GET_CONTEXTS_LIST, fetchContexts);
 }
 
 function* fetchContexts() {
     try {
         const data = yield call(filtersService.getContextsList);
-        console.log('data', data);
         yield put({type: filtersConstants.CONTEXTS_LIST_SUCCEEDED, data: data});
-        console.log('data', data);
     } catch (e) {
-        yield put({type: "USER_FETCH_FAILED", message: e.message});
+        console.error(e);
     }
 }
 
-export function* getDimentionsSaga() {
-    yield takeEvery(filtersConstants.CONTEXTS_LIST_REQUESTED, fetchDimentions);
+export function* filterDimentionsWatcherSaga() {
+    yield takeLatest(filterDataConstants.SET_DIMENTIONS_LIST_BY_FILTER, fetchFilterDimentions);
 }
 
-function* fetchDimentions(action) {
+function* fetchFilterDimentions(action) {
     try {
-        const user = yield call(filtersService.getContextsList, action.payload.userId);
-        yield put({type: "USER_FETCH_SUCCEEDED", user: user});
+        const data = yield call(filtersService.getDimentionsList, action.data);
+        yield put({type: filterDataConstants.SET_DIMENTIONS_LIST_BY_FILTER_SUCCEEDED, data: data, name: action.name});
     } catch (e) {
-        yield put({type: "USER_FETCH_FAILED", message: e.message});
+        console.error(e);
     }
 }
 
-export function* getFiltersSaga() {
-    yield takeEvery(filtersConstants.GET_FILTERS_LIST, fetchFilters);
+export function* filterFiltersWatcherSaga() {
+    yield takeLatest(filterDataConstants.SET_FILTERS_LIST_BY_FILTER, fetchFilterFilters);
 }
 
-function* fetchFilters(action) {
+function* fetchFilterFilters(action) {
     try {
-        const user = yield call(filtersService.getContextsList, action.payload.userId);
-        yield put({type: "USER_FETCH_SUCCEEDED", user: user});
+        const data = yield call(filtersService.getFiltersList, action.data, action.filters);
+        yield put({type: filterDataConstants.SET_FILTERS_LIST_BY_FILTER_SUCCEEDED, data: data, name: action.name});
     } catch (e) {
-        yield put({type: "USER_FETCH_FAILED", message: e.message});
+        console.error(e);
     }
+}
+
+
+export default function* rootSaga() {
+    yield all([
+        contextsWatcherSaga(),
+        filterDimentionsWatcherSaga(),
+        filterFiltersWatcherSaga(),
+    ]);
 }

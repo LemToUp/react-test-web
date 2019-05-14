@@ -4,7 +4,7 @@ export const filtersService = {
     getFiltersList,
 };
 
-/*function getContextsList() {
+function getContextsList() {
     return new Promise(resolve => {
         return setTimeout(() => {
             return resolve(import (`${process.env.REACT_APP_REQUEST_PATH}/contexts`));
@@ -12,28 +12,22 @@ export const filtersService = {
     }).then((data) => { //https://medium.com/webpack/webpack-4-import-and-commonjs-d619d626b655
         return data.default;
     });
-}*/
-
-async function getContextsList() {
-    await setTimeout(() => {
-        return import (`${process.env.REACT_APP_REQUEST_PATH}/contexts`);
-    }, 200);
 }
 
-function getDimentionsList(ids) {
+function getDimentionsList(ids = []) {
     return new Promise(resolve => {
         return setTimeout(() => {
             return resolve(import (`${process.env.REACT_APP_REQUEST_PATH}/categories`));
         }, 200);
     }).then((data) => { //https://medium.com/webpack/webpack-4-import-and-commonjs-d619d626b655
-        return data.default.filter(value => ids.indexOf(value.section_id) !== -1);
+        return (data.default && data.default.length > 0) ? data.default.filter(value => ids.indexOf(value.section_id) !== -1) : [];
     });
 }
 
-function getFiltersList(ids, filters = {}) {
+function getFiltersList(ids = [], filters = {}) {
     return new Promise(resolve => {
         return setTimeout(() => {
-            return resolve(import (`${process.env.REACT_APP_REQUEST_PATH}/filters`));
+            return (ids && ids.length > 0) ? resolve(import (`${process.env.REACT_APP_REQUEST_PATH}/filters`)) : {default: []};
         }, 200);
     }).then((responce) => { //https://medium.com/webpack/webpack-4-import-and-commonjs-d619d626b655
         if (ids) {

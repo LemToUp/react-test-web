@@ -1,7 +1,6 @@
 import {createStore, combineReducers, applyMiddleware, compose} from 'redux';
-import thunk from 'redux-thunk';
 import createSagaMiddleware from 'redux-saga';
-import {getContextsSaga} from '../sagas/Api';
+import rootSaga from '../sagas/Api';
 import {filters} from '../reducers/Filters';
 import {filterData} from '../reducers/FilterData';
 
@@ -17,7 +16,7 @@ export default () => {
         composeEnhancers(applyMiddleware(sagaMiddleware)),
     );
 
-    sagaMiddleware.run(getContextsSaga);
+    sagaMiddleware.run(rootSaga);
 
     return store;
 }
