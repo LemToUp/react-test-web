@@ -96,7 +96,7 @@ export function Filter(props) {
                 if (props.setFiltersChecks) {
                     props.setFiltersChecks(data);
                 }
-                //sendFiltersListToWidget(props.filterFilters, props.filterFiltersChecks);
+                sendFiltersListToWidget(props.filterFilters, data);
                 break;
             case dataTypes.SORT:
                 if (props.setSortRules) {
@@ -146,7 +146,6 @@ export function Filter(props) {
         filters = filters.filter(filter => {
             return dimentionsChecks.indexOf(filter.category_id) !== -1;
         });
-        //sendFiltersListToWidget(filters, props.filterFiltersChecks);
         return filters;
     };
 

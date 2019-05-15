@@ -1,6 +1,6 @@
 import {createStore, combineReducers, applyMiddleware, compose} from 'redux';
 import createSagaMiddleware from 'redux-saga';
-import rootSaga from '../sagas/Api';
+import rootSaga from '../sagas/RootSaga';
 import {filters} from '../reducers/Filters';
 import {filterData} from '../reducers/FilterData';
 

@@ -1,4 +1,4 @@
-import {all, call, put, takeEvery, takeLatest} from 'redux-saga/effects';
+import {call, put, takeLatest} from 'redux-saga/effects';
 import {filtersConstants} from '../constants/Filters';
 import {filterDataConstants} from '../constants/FilterData';
 import {filtersService} from '../services/Filters';
@@ -40,13 +40,4 @@ function* fetchFilterFilters(action) {
     } catch (e) {
         console.error(e);
     }
-}
-
-
-export default function* rootSaga() {
-    yield all([
-        contextsWatcherSaga(),
-        filterDimentionsWatcherSaga(),
-        filterFiltersWatcherSaga(),
-    ]);
 }
