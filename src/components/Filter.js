@@ -128,7 +128,7 @@ export function Filter(props) {
         }
     };
 
-    const filteredDimentions = () => {
+    const calculateFilteredDimentions = () => {
         const dimentions = props.filterDimentions || [];
         const contextsChecks = props.filterContextsChecks || [];
 
@@ -137,10 +137,10 @@ export function Filter(props) {
         });
     };
 
-    const filteredFilters = () => {
+    const calculateFilteredFilters = (dimentions) => {
         let filters = props.filterFilters || [];
         let dimentionsChecks = props.filterDimentionsChecks || [];
-        dimentionsChecks = filteredDimentions()
+        dimentionsChecks = dimentions
             .map(dimention => dimention.id)
             .filter(id => dimentionsChecks.indexOf(id) !== -1);
         filters = filters.filter(filter => {
@@ -148,6 +148,9 @@ export function Filter(props) {
         });
         return filters;
     };
+
+    const filteredDimentions = calculateFilteredDimentions();
+    const filteredFilters = calculateFilteredFilters(filteredDimentions);
 
     return (
         <div className="Filter-modal-wrapper">
@@ -175,7 +178,7 @@ export function Filter(props) {
                         title="DIMENTIONS"
                         onToggleList={onToggleDimentions}
                         onSendCheckedData={onGetDimentions}
-                        data={filteredDimentions()}
+                        data={filteredDimentions}
                         isDisplaying={isDimentionsListDisplaying}
                         checks={props.filterDimentionsChecks}
                         className="col-md-10 offset-md-2 p-1"
@@ -186,7 +189,7 @@ export function Filter(props) {
                         className="col-md-10 offset-md-2 p-2"
                     />
                     <ContentFilterSection
-                        data={filteredFilters()}
+                        data={filteredFilters}
                         onSendCheckedData={onGetFilters}
                         checks={props.filterFiltersChecks}
                         className="col-md-10 offset-md-2 p-1"
