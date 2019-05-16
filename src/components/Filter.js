@@ -167,6 +167,7 @@ export function Filter(props) {
                 <div className="Filter-modal-body row align-items-end">
                     <DropDownFilterSection
                         title="CONTEXTS"
+                        name={`${props.name}_contexts`}
                         onToggleList={onToggleContexts}
                         onSendCheckedData={onGetContexts}
                         data={props.filterContexts}
@@ -176,6 +177,7 @@ export function Filter(props) {
                     />
                     <DropDownFilterSection
                         title="DIMENTIONS"
+                        name={`${props.name}_dimentions`}
                         onToggleList={onToggleDimentions}
                         onSendCheckedData={onGetDimentions}
                         data={filteredDimentions}
@@ -190,10 +192,10 @@ export function Filter(props) {
                     />
                     <ContentFilterSection
                         data={filteredFilters}
+                        name={`${props.name}_filters`}
                         onSendCheckedData={onGetFilters}
                         checks={props.filterFiltersChecks}
                         className="col-md-10 offset-md-2 p-1"
-                        name={props.name}
                     />
                 </div>
             </div>

@@ -2,7 +2,7 @@ import React, {useState} from 'react';
 import '../styles/ContentFilterSection.scss';
 import {useChecksInputHandler} from '../hooks/ChecksInputHandler';
 
-function DropDownFilterSection(props) {
+function ContentFilterSection(props) {
 
     const key = props.key ? props.key : 'id';
     const value = props.value ? props.value : 'name';
@@ -21,16 +21,16 @@ function DropDownFilterSection(props) {
     const renderList = (data) => {
         if (Array.isArray(data) && data.length > 0) {
             return <ul className="list-group">
-                {data.map((item, i) => (
-                        <li key={`li_${uniqueName}_${i}`}>
+                {data.map((item) => (
+                        <li key={`li_${uniqueName}_${item.id}`}>
                             <div className="checkbox">
                                 <label
-                                    htmlFor={`${uniqueName}_${i}`}
+                                    htmlFor={`${uniqueName}_${item.id}`}
                                     className="pointer"
                                 >
                                     <input
                                         type="checkbox"
-                                        id={`${uniqueName}_${i}`}
+                                        id={`${uniqueName}_${item.id}`}
                                         value={item[key]}
                                         name={item[key]}
                                         checked={hasDataValue(item[key])}
@@ -54,4 +54,4 @@ function DropDownFilterSection(props) {
     );
 }
 
-export default DropDownFilterSection;
+export default ContentFilterSection;
