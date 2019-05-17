@@ -1,9 +1,7 @@
-import {useState, useEffect, useMemo} from 'react';
+import {useEffect, useMemo} from 'react';
 import ReactDOM from 'react-dom';
 
 export function useChecksInputHandler(props) {
-    const [forceUpdateVariable, forceUpdate] = useState(false);
-
     useEffect(
         () => {
             if (!props.checks && props.onSendCheckedData) {
@@ -29,8 +27,6 @@ export function useChecksInputHandler(props) {
             }
         }
 
-        //forceUpdate(!forceUpdateVariable); //Force update analoque
-
         if (props.onSendCheckedData) {
             props.onSendCheckedData(checks);
         }
@@ -43,7 +39,7 @@ export function useChecksInputHandler(props) {
             .filter(value => props.checks.indexOf(value.id) !== -1)
             .map(value => value.name)
             .join(', ') : '';
-    }, [props.data, props.checks, forceUpdateVariable]);
+    }, [props.data, props.checks]);
 
     return [changeData, checkedDataString];
 }
