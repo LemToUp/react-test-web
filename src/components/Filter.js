@@ -81,6 +81,7 @@ export function Filter(props) {
     };
 
     const storeCheckedData = (type, data) => {
+        let filtersChecks = props.filterFiltersChecks;
         switch (type) {
             case dataTypes.CONTEXT:
                 if (props.setContextsChecks) {
@@ -96,7 +97,7 @@ export function Filter(props) {
                 if (props.setFiltersChecks) {
                     props.setFiltersChecks(data);
                 }
-                sendFiltersListToWidget(props.filterFilters, data);
+                filtersChecks = data;
                 break;
             case dataTypes.SORT:
                 if (props.setSortRules) {
@@ -105,6 +106,9 @@ export function Filter(props) {
                 break;
             default:
         }
+        const dimentions = calculateFilteredDimentions(props.filterDimentions, props.filterContextsChecks);
+        const filters = calculateFilteredFilters(props.filterFilters, dimentions, props.filterDimentionsChecks);
+        sendFiltersListToWidget(filters, filtersChecks);
     };
 
     const storeFilterData = (type, data) => {
@@ -128,18 +132,13 @@ export function Filter(props) {
         }
     };
 
-    const calculateFilteredDimentions = () => {
-        const dimentions = props.filterDimentions || [];
-        const contextsChecks = props.filterContextsChecks || [];
-
+    const calculateFilteredDimentions = (dimentions = [], contextsChecks = []) => {
         return dimentions.filter(dimention => {
             return contextsChecks.indexOf(dimention.section_id) !== -1;
         });
     };
 
-    const calculateFilteredFilters = (dimentions) => {
-        let filters = props.filterFilters || [];
-        let dimentionsChecks = props.filterDimentionsChecks || [];
+    const calculateFilteredFilters = (filters = [], dimentions = [], dimentionsChecks = []) => {
         dimentionsChecks = dimentions
             .map(dimention => dimention.id)
             .filter(id => dimentionsChecks.indexOf(id) !== -1);
@@ -149,8 +148,8 @@ export function Filter(props) {
         return filters;
     };
 
-    const filteredDimentions = calculateFilteredDimentions();
-    const filteredFilters = calculateFilteredFilters(filteredDimentions);
+    const filteredDimentions = calculateFilteredDimentions(props.filterDimentions, props.filterContextsChecks);
+    const filteredFilters = calculateFilteredFilters(props.filterFilters, filteredDimentions, props.filterDimentionsChecks);
 
     return (
         <div className="Filter-modal-wrapper">
