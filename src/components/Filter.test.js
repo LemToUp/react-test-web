@@ -10,20 +10,81 @@ import {filtersDataActions} from '../actions/FilterData';
 import {act} from 'react-test-renderer';
 import {filterDataConstants} from '../constants/FilterData';
 
+
+/* Test depends on json data from data_test folder*/
 describe('Filter component testing', () => {
-    let container, store, component;
+    let container, store, component, onGetDataMock;
+
     const filterName = 'filter_test';
+    const getLastMockCall = (onGetDataMock) => onGetDataMock.mock.calls[onGetDataMock.mock.calls.length - 1];
+
+    const setContexts =  async (ids = []) => {
+        let contexts = await import (`${process.env.REACT_APP_REQUEST_PATH}/contexts`);
+        contexts = contexts.default;
+        expect(contexts.length).toBe(2);
+
+        act(() => { //Set contexts to Filter state
+            store.dispatch(filtersDataActions.setContextsDataByFilter(filterName, contexts));
+        });
+
+        act(() => { //Init filter contexts checks
+            store.dispatch(filtersDataActions.setContextsChecksByFilter(filterName, ids));
+        });
+
+        return true;
+    };
+
+    const setDimentions = async (ids = []) => {
+        let dimentions = await import (`${process.env.REACT_APP_REQUEST_PATH}/categories`);
+        dimentions = dimentions.default;
+        expect(dimentions.length).toBe(4);
+
+        act(() => { //Make sync inserting
+            store.dispatch({
+                type: filterDataConstants.SET_DIMENTIONS_LIST_BY_FILTER_SUCCEEDED,
+                name: filterName,
+                data: dimentions,
+            });
+        });
+
+        act(() => { //Init filter contexts checks
+            store.dispatch(filtersDataActions.setDimentionsChecksByFilter(filterName, ids));
+        });
+
+        return true;
+    };
+
+    const setFilters = async (ids = []) => {
+        let filters = await import (`${process.env.REACT_APP_REQUEST_PATH}/filters`);
+        filters = filters.default;
+        expect(filters.length).toBe(8);
+
+        act(() => { //Make sync inserting
+            store.dispatch({
+                type: filterDataConstants.SET_FILTERS_LIST_BY_FILTER_SUCCEEDED,
+                name: filterName,
+                data: filters,
+            });
+        });
+
+        act(() => { //Init filter contexts checks
+            store.dispatch(filtersDataActions.setFiltersChecksByFilter(filterName, ids));
+        });
+
+        return true;
+    };
 
     beforeEach(() => {
         store = configureStore();
         store.dispatch(filtersActions.getContexts());
         store.dispatch(filtersDataActions.initFilterSection(filterName));
+        onGetDataMock = jest.fn();
 
         component = (
             <Provider store={store}>
                 <ConnectedFilter
                     name={filterName}
-                    onGetData={data => console.log(data)}
+                    onGetData={onGetDataMock}
                 />
             </Provider>
         );
@@ -47,17 +108,7 @@ describe('Filter component testing', () => {
 
 
     it('+check Contexts displaying', async () => {
-        let contexts = await import (`${process.env.REACT_APP_REQUEST_PATH}/contexts`);
-        contexts = contexts.default;
-        expect(contexts.length).toBe(2);
-
-        act(() => { //Set contexts to Filter state
-            store.dispatch(filtersDataActions.setContextsDataByFilter(filterName, contexts));
-        });
-
-        act(() => { //Init filter contexts checks
-            store.dispatch(filtersDataActions.setContextsChecksByFilter(filterName, []));
-        });
+        await setContexts([]);
 
         act(() => {
             ReactDOM.render(component, container);
@@ -89,25 +140,8 @@ describe('Filter component testing', () => {
     });
 
     it('+check Dimentions displaying', async () => {
-        act(() => { //Init filter contexts checks
-            store.dispatch(filtersDataActions.setContextsChecksByFilter(filterName, [2]));
-        });
-
-        let dimentions = await import (`${process.env.REACT_APP_REQUEST_PATH}/categories`);
-        dimentions = dimentions.default;
-        expect(dimentions.length).toBe(4);
-
-        act(() => { //Make sync inserting
-            store.dispatch({
-                type: filterDataConstants.SET_DIMENTIONS_LIST_BY_FILTER_SUCCEEDED,
-                name: filterName,
-                data: dimentions,
-            });
-        });
-
-        act(() => { //Init filter contexts checks
-            store.dispatch(filtersDataActions.setDimentionsChecksByFilter(filterName, [1]));
-        });
+        await setContexts([2]);
+        await setDimentions([1]);
 
         act(() => {
             ReactDOM.render(component, container);
@@ -132,56 +166,9 @@ describe('Filter component testing', () => {
     });
 
     it('+check Filters displaying', async () => {
-        let fnc = data => {console.log(data)};
-
-        let component = (
-            <Provider store={store}>
-                <ConnectedFilter
-                    name={filterName}
-                    onGetData={fnc}
-                />
-            </Provider>
-        );
-
-        let container = document.createElement('div');
-        document.body.appendChild(container);
-
-
-        act(() => { //Init filter contexts checks
-            store.dispatch(filtersDataActions.setContextsChecksByFilter(filterName, [1, 2]));
-        });
-
-        let dimentions = await import (`${process.env.REACT_APP_REQUEST_PATH}/categories`);
-        dimentions = dimentions.default;
-        expect(dimentions.length).toBe(4);
-
-        act(() => { //Make sync inserting
-            store.dispatch({
-                type: filterDataConstants.SET_DIMENTIONS_LIST_BY_FILTER_SUCCEEDED,
-                name: filterName,
-                data: dimentions,
-            });
-        });
-
-        act(() => { //Init filter contexts checks
-            store.dispatch(filtersDataActions.setDimentionsChecksByFilter(filterName, [1, 4]));
-        });
-
-        let filters = await import (`${process.env.REACT_APP_REQUEST_PATH}/filters`);
-        filters = filters.default;
-        expect(filters.length).toBe(8);
-
-        act(() => { //Make sync inserting
-            store.dispatch({
-                type: filterDataConstants.SET_FILTERS_LIST_BY_FILTER_SUCCEEDED,
-                name: filterName,
-                data: filters,
-            });
-        });
-
-        act(() => { //Init filter contexts checks
-            store.dispatch(filtersDataActions.setFiltersChecksByFilter(filterName, [36]));
-        });
+        await setContexts([1, 2]);
+        await setDimentions([1, 4]);
+        await setFilters([36]);
 
         act(() => {
             ReactDOM.render(component, container);
@@ -204,7 +191,6 @@ describe('Filter component testing', () => {
             checkFiltersInput_36.dispatchEvent(new MouseEvent('click'));
         });
 
-
         /*Checking out one of a contexts (id = 1)*/
 
         act(() => { //Init filter contexts checks
@@ -217,9 +203,27 @@ describe('Filter component testing', () => {
         checkFiltersInput_36 = container.querySelector(`#${filterName}_filters_36`); //Filter id = 36 is exists
         expect(checkFiltersInput_36).not.toBe(null);
 
+        expect(Array.isArray(getLastMockCall(onGetDataMock))).toBe(true);
+        expect(getLastMockCall(onGetDataMock)[0]).toHaveLength(1);
+        expect(getLastMockCall(onGetDataMock)[0]).toEqual(expect.arrayContaining(["Post Roll"]));
+
         act(() => { //Check filter (id = 3)
             checkFiltersInput_36.dispatchEvent(new MouseEvent('click', {bubbles: true}));
         });
 
+        act(() => { //Init filter contexts checks
+            store.dispatch(filtersDataActions.setContextsChecksByFilter(filterName, [1, 2]));
+        });
+
+        checkFiltersInput_2 = container.querySelector(`#${filterName}_filters_2`); //Filter id = 2 is exists
+        expect(checkFiltersInput_2).not.toBe(null);
+
+        act(() => { //Check filter (id = 3)
+            checkFiltersInput_2.dispatchEvent(new MouseEvent('click', {bubbles: true}));
+        });
+
+        expect(Array.isArray(getLastMockCall(onGetDataMock))).toBe(true);
+        expect(getLastMockCall(onGetDataMock)[0]).toHaveLength(1);
+        expect(getLastMockCall(onGetDataMock)[0]).toEqual(expect.arrayContaining(["Test2"]));
     });
 });
