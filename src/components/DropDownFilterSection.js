@@ -1,4 +1,4 @@
-import React, {useState, useEffect, useMemo} from 'react';
+import React, {useState} from 'react';
 import '../styles/DropDownFilterSection.scss';
 import {useChecksInputHandler} from '../hooks/ChecksInputHandler';
 
@@ -26,47 +26,48 @@ function DropDownFilterSection(props) {
     const onChangeData = function (e) {
         changeData(props, e);
     };
-    
+
     const renderList = (data) => {
         if (Array.isArray(data) && data.length > 0) {
             return <ul className="list-group pr-5">
                 {data.map((item) => (
-                <li className="p-1" key={`li_${uniqueName}_${item.id}`}>
-                    <div className="form-check">
-                        <input
-                            className="form-check-input"
-                            type="checkbox"
-                            id={`${uniqueName}_${item.id}`}
-                            value={item[key]}
-                            name={item[key]}
-                            checked={hasDataValue(item[key])}
-                            onChange={onChangeData}
-                        />
-                            <label
-                                className="form-check-label"
-                                htmlFor={`${uniqueName}_${item.id}`}
-                                key={`label_${uniqueName}_${item.id}`}
-                            >
-                                {item[value]}
-                            </label>
-                    </div>
-                </li>
-                )
+                        <li className="p-1" key={`li_${uniqueName}_${item.id}`}>
+                            <div className="form-check">
+                                <input
+                                    className="form-check-input"
+                                    type="checkbox"
+                                    id={`${uniqueName}_${item.id}`}
+                                    value={item[key]}
+                                    name={item[key]}
+                                    checked={hasDataValue(item[key])}
+                                    onChange={onChangeData}
+                                />
+                                <label
+                                    className="form-check-label"
+                                    htmlFor={`${uniqueName}_${item.id}`}
+                                    key={`label_${uniqueName}_${item.id}`}
+                                >
+                                    {item[value]}
+                                </label>
+                            </div>
+                        </li>
+                    ),
                 )}
-            </ul>
+            </ul>;
         }
     };
 
     return (
         <div className={`Filter-section Drop-down-section ${props.className ? props.className : ''}`}>
-                <p>
-                    <i className={`material-icons pointer p-1 toggle_${props.title}`} onClick={toggleDropDown}>{props.isDisplaying ? 'expand_less' : 'expand_more'}</i>
-                    <span className="Drop-down-section-title mr-2">{props.title}</span>
-                    <span className="Drop-down-section-row">{checkedDataString}</span>
-                </p>
-                <div className={`Drop-down-modal ${!props.isDisplaying ? 'd-none' : ''}`}>
-                    {renderList(props.data)}
-                </div>
+            <p>
+                <i className={`material-icons pointer p-1 toggle_${props.title}`}
+                   onClick={toggleDropDown}>{props.isDisplaying ? 'expand_less' : 'expand_more'}</i>
+                <span className="Drop-down-section-title mr-2">{props.title}</span>
+                <span className="Drop-down-section-row">{checkedDataString}</span>
+            </p>
+            <div className={`Drop-down-modal ${!props.isDisplaying ? 'd-none' : ''}`}>
+                {renderList(props.data)}
+            </div>
 
         </div>
     );
