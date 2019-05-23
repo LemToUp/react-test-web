@@ -4,7 +4,6 @@ import DropDownFilterSection from './DropDownFilterSection';
 import SearchFilterSection from './SearchFilterSection';
 import ContentFilterSection from './ContentFilterSection';
 import {connect} from 'react-redux';
-import {filtersActions} from '../actions/Filters';
 import {filtersDataActions} from '../actions/FilterData';
 import {useDraggable} from '../hooks/Draggable';
 
@@ -17,7 +16,9 @@ export const dataTypes = {
 
 export function Filter(props) {
     const onClose = (e) => {
-        props.closeEvent(e);
+        if (props.closeEvent) {
+            props.closeEvent(e);
+        }
     };
 
     const [isContextListDisplaying, setIsContextListDisplaying] = useState(false);
@@ -41,7 +42,7 @@ export function Filter(props) {
         if (!isContextListDisplaying) {
             closeAllLists();
         } else {
-            recalculateData(dataTypes.CONTEXT, props.filterContextsChecks);
+            storeFilterData(dataTypes.DIMENTIONS, props.filterContextsChecks);
             setIsDimentionsListDisplaying(true);
         }
         setIsContextListDisplaying(!isContextListDisplaying);
@@ -51,7 +52,7 @@ export function Filter(props) {
         if (!isDimentionsListDisplaying) {
             closeAllLists();
         } else {
-            recalculateData(dataTypes.DIMENTIONS, props.filterDimentionsChecks);
+            storeFilterData(dataTypes.FILTERS, props.filterDimentionsChecks);
         }
         setIsDimentionsListDisplaying(!isDimentionsListDisplaying);
     };
@@ -68,80 +69,87 @@ export function Filter(props) {
         storeCheckedData(dataTypes.FILTERS, ids);
     };
 
-    const excludeMissingIds = (ids = new Set(), checkedData = []) => { //Exclude ids which are missing at checkedData
-        const currentIds = checkedData.map(item => item.id);
-        const actialIds = [...ids].filter(incomingId => {
-            return currentIds.find((id) => id === incomingId);
-        });
-        return new Set(actialIds);
-    };
-
     const onGetSortRules = (filters) => {
-        recalculateData(dataTypes.SORT, filters);
+        storeCheckedData(dataTypes.SORT, filters);
     };
 
     const sendFiltersListToWidget = (filters, checks) => {
         if (props.onGetData && filters && checks) {
-            props.onGetData(
-                filters
-                    .filter((filter => checks.indexOf(filter.id) !== -1))
-                    .map((filter) => filter.name),
-            );
+            const checkedFilters = filters.filter((filter => checks.indexOf(filter.id) !== -1)).map((filter) => filter.name);
+            props.onGetData(checkedFilters);
         }
     };
 
     const storeCheckedData = (type, data) => {
+        let filtersChecks = props.filterFiltersChecks;
         switch (type) {
             case dataTypes.CONTEXT:
-                props.setContextsChecks(data);
+                if (props.setContextsChecks) {
+                    props.setContextsChecks(data);
+                }
                 break;
             case dataTypes.DIMENTIONS:
-                props.setDimentionsChecks(data);
+                if (props.setDimentionsChecks) {
+                    props.setDimentionsChecks(data);
+                }
                 break;
             case dataTypes.FILTERS:
-                props.setFiltersChecks(data);
-                sendFiltersListToWidget(props.filterFilters, props.filterFiltersChecks);
+                if (props.setFiltersChecks) {
+                    props.setFiltersChecks(data);
+                }
+                filtersChecks = data;
                 break;
             case dataTypes.SORT:
-                props.setSortRules(data);
+                if (props.setSortRules) {
+                    props.setSortRules(data);
+                }
                 break;
             default:
         }
+        const dimentions = calculateFilteredDimentions(props.filterDimentions, props.filterContextsChecks);
+        const filters = calculateFilteredFilters(props.filterFilters, dimentions, props.filterDimentionsChecks);
+        sendFiltersListToWidget(filters, filtersChecks);
     };
 
     const storeFilterData = (type, data) => {
         switch (type) {
             case dataTypes.CONTEXT:
-                props.setContexts(data);
+                if (props.setContexts) {
+                    props.setContexts(data);
+                }
                 break;
             case dataTypes.DIMENTIONS:
-                props.setDimentions(data);
+                if (props.setDimentions) {
+                    props.setDimentions(data);
+                }
                 break;
             case dataTypes.FILTERS:
-                props.setFilters(data);
+                if (props.setFilters) {
+                    props.setFilters(data);
+                }
                 break;
             default:
         }
     };
 
-    const recalculateData = (type, checks) => {
-        storeCheckedData(type, checks);
-        if (props.filterContextsChecks) {
-            return props.getDimentionsFromState(props.filterContextsChecks)
-                .then((getDimentionsAction) => {
-                    storeFilterData(dataTypes.DIMENTIONS, getDimentionsAction.data);
-                    if (props.filterDimentionsChecks) {
-                        const ids = excludeMissingIds(props.filterDimentionsChecks, getDimentionsAction.data);
-                        props.getFiltersFromState([...ids], props.sortRules)
-                            .then(getFiltersAction => {
-                                storeFilterData(dataTypes.FILTERS, getFiltersAction.data);
-                                return getFiltersAction;
-                            });
-                        return getDimentionsAction;
-                    }
-                });
-        }
+    const calculateFilteredDimentions = (dimentions = [], contextsChecks = []) => {
+        return dimentions.filter(dimention => {
+            return contextsChecks.indexOf(dimention.section_id) !== -1;
+        });
     };
+
+    const calculateFilteredFilters = (filters = [], dimentions = [], dimentionsChecks = []) => {
+        dimentionsChecks = dimentions
+            .map(dimention => dimention.id)
+            .filter(id => dimentionsChecks.indexOf(id) !== -1);
+        filters = filters.filter(filter => {
+            return dimentionsChecks.indexOf(filter.category_id) !== -1;
+        });
+        return filters;
+    };
+
+    const filteredDimentions = calculateFilteredDimentions(props.filterDimentions, props.filterContextsChecks);
+    const filteredFilters = calculateFilteredFilters(props.filterFilters, filteredDimentions, props.filterDimentionsChecks);
 
     return (
         <div className="Filter-modal-wrapper">
@@ -158,6 +166,7 @@ export function Filter(props) {
                 <div className="Filter-modal-body row align-items-end">
                     <DropDownFilterSection
                         title="CONTEXTS"
+                        name={`${props.name}_contexts`}
                         onToggleList={onToggleContexts}
                         onSendCheckedData={onGetContexts}
                         data={props.filterContexts}
@@ -167,9 +176,10 @@ export function Filter(props) {
                     />
                     <DropDownFilterSection
                         title="DIMENTIONS"
+                        name={`${props.name}_dimentions`}
                         onToggleList={onToggleDimentions}
                         onSendCheckedData={onGetDimentions}
-                        data={props.filterDimentions}
+                        data={filteredDimentions}
                         isDisplaying={isDimentionsListDisplaying}
                         checks={props.filterDimentionsChecks}
                         className="col-md-10 offset-md-2 p-1"
@@ -180,7 +190,8 @@ export function Filter(props) {
                         className="col-md-10 offset-md-2 p-2"
                     />
                     <ContentFilterSection
-                        data={props.filterFilters}
+                        data={filteredFilters}
+                        name={`${props.name}_filters`}
                         onSendCheckedData={onGetFilters}
                         checks={props.filterFiltersChecks}
                         className="col-md-10 offset-md-2 p-1"
@@ -191,8 +202,8 @@ export function Filter(props) {
     );
 }
 
-function mapStateToProps(state, ownProps) {
-    const {contexts, dimentions, filters} = state.filters;
+const mapStateToProps = (state, ownProps) => {
+    const {contexts} = state.filters;
     const {
         filterContexts,
         filterContextsChecks,
@@ -204,8 +215,6 @@ function mapStateToProps(state, ownProps) {
     } = state.filterData[ownProps.name];
     return {
         contexts,
-        dimentions,
-        filters,
         filterContexts,
         filterContextsChecks,
         filterDimentions,
@@ -214,7 +223,7 @@ function mapStateToProps(state, ownProps) {
         filterFiltersChecks,
         sortRules,
     };
-}
+};
 
 function mapDispatchToProps(dispatch, ownProps) {
     return {
@@ -224,8 +233,6 @@ function mapDispatchToProps(dispatch, ownProps) {
         setDimentionsChecks: (checks) => dispatch(filtersDataActions.setDimentionsChecksByFilter(ownProps.name, checks)),
         setFilters: (data) => dispatch(filtersDataActions.setFiltersDataByFilter(ownProps.name, data)),
         setFiltersChecks: (checks) => dispatch(filtersDataActions.setFiltersChecksByFilter(ownProps.name, checks)),
-        getDimentionsFromState: (ids) => dispatch(filtersActions.getDimentions([...ids])),
-        getFiltersFromState: (ids, rules) => dispatch(filtersActions.getFilters([...ids], rules)),
         setSortRules: (filters) => dispatch(filtersDataActions.setSortRulesByFilter(ownProps.name, filters)),
     };
 };

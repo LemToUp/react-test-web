@@ -1,8 +1,7 @@
-import {useState, useEffect, useMemo} from 'react';
+import {useEffect, useMemo} from 'react';
+import ReactDOM from 'react-dom';
 
 export function useChecksInputHandler(props) {
-    const [forceUpdateVariable, forceUpdate] = useState(false);
-
     useEffect(
         () => {
             if (!props.checks && props.onSendCheckedData) {
@@ -12,21 +11,24 @@ export function useChecksInputHandler(props) {
         [],
     );
 
-    const onChangeData = (props, e) => {
-        if (e.target.checked) {
-            props.checks.push(Number.parseInt(e.target.value)); //Event transform value to a string
-            e.target.checked = true; //Toggle input
-        } else {
-            const index = props.checks.indexOf(Number.parseInt(e.target.value));
-            if (index !== -1) {
-                props.checks.splice(index, 1); //Remove if founded
+    const changeData = (props, e) => {
+        let checks = props.checks ? [...props.checks] : [];
+        let target = ReactDOM.findDOMNode(e.target);
+        if (target) {
+            if (target.checked) {
+                checks.push(Number.parseInt(e.target.value)); //Event transform value to a string
+                e.target.checked = true; //Toggle input
+            } else {
+                const index = checks.indexOf(Number.parseInt(e.target.value));
+                if (index !== -1) {
+                    checks.splice(index, 1); //Remove if founded
+                }
+                e.target.checked = false; //Toggle input
             }
-            e.target.checked = false; //Toggle input
         }
-        forceUpdate(!forceUpdateVariable); //Force update analoque
 
         if (props.onSendCheckedData) {
-            props.onSendCheckedData(props.checks);
+            props.onSendCheckedData(checks);
         }
 
         e.stopPropagation();
@@ -37,7 +39,7 @@ export function useChecksInputHandler(props) {
             .filter(value => props.checks.indexOf(value.id) !== -1)
             .map(value => value.name)
             .join(', ') : '';
-    }, [props.data, props.checks, forceUpdateVariable]);
+    }, [props.data, props.checks]);
 
-    return [onChangeData, checkedDataString];
+    return [changeData, checkedDataString];
 }
