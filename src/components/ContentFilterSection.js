@@ -4,11 +4,11 @@ import {useChecksInputHandler} from '../hooks/ChecksInputHandler';
 
 function ContentFilterSection(props) {
 
-    const key = props.key ? props.key : 'id';
-    const value = props.value ? props.value : 'name';
-    const className = props.className ? props.className : '';
+    const key = props.key || 'id';
+    const value = props.value || 'name';
+    const className = props.className || '';
     const [changeData] = useChecksInputHandler(props);
-    const [uniqueName] = useState((props.name ? props.name : `unique_${Math.random()}`));
+    const [uniqueName] = useState((props.name || `unique_${Math.random()}`));
 
     const onChangeData = function (e) {
         changeData(props, e);

@@ -19,8 +19,6 @@ it('renders without crashing', () => {
             <Provider store={store}>
                 <DropDownFilterSection
                     title="CONTEXTS"
-                    //onToggleList={onToggleContexts}
-                    //onSendCheckedData={onGetContexts}
                     data={action.data}
                     isDisplaying={true}
                     checks={[]}

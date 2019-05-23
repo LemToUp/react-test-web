@@ -4,10 +4,10 @@ import {useChecksInputHandler} from '../hooks/ChecksInputHandler';
 
 function DropDownFilterSection(props) {
 
-    const key = props.key ? props.key : 'id';
-    const value = props.value ? props.value : 'name';
+    const key = props.key || 'id';
+    const value = props.value || 'name';
     const [changeData, checkedDataString] = useChecksInputHandler(props);
-    const [uniqueName] = useState((props.name ? props.name : `unique_${Math.random()}`));
+    const [uniqueName] = useState((props.name || `unique_${Math.random()}`));
 
     const toggleDropDown = (e) => {
         e.stopPropagation();
@@ -58,7 +58,7 @@ function DropDownFilterSection(props) {
     };
 
     return (
-        <div className={`Filter-section Drop-down-section ${props.className ? props.className : ''}`}>
+        <div className={`Filter-section Drop-down-section ${props.className || ''}`}>
             <p>
                 <i className={`material-icons pointer p-1 toggle_${props.title}`}
                    onClick={toggleDropDown}>{props.isDisplaying ? 'expand_less' : 'expand_more'}</i>

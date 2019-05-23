@@ -3,7 +3,7 @@ import { filterDataConstants } from '../constants/FilterData';
 export function filterData(state = {}, action) {
     switch (action.type) {
         case filterDataConstants.INIT_FILTER_SECTION:
-            state[action.name] = state[action.name] ? state[action.name] : {};
+            state[action.name] = state[action.name] || {};
             return Object.assign({}, state);
 
         case filterDataConstants.SET_CONTEXTS_LIST_BY_FILTER:

@@ -77,7 +77,7 @@ function DropDownFilterSection(props) {
     };
 
     return (
-        <div className={`Filter-section Search-filter-section ${props.className ? props.className : ''}`}>
+        <div className={`Filter-section Search-filter-section ${props.className || ''}`}>
             <div className="input-group mb-1">
                 <div className="input-group-prepend">
                     <span className="input-group-text p-1">

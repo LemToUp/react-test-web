@@ -3,7 +3,7 @@ import {useState, useEffect} from 'react';
 export function useDraggable(defaultStyle, defaultOffset) {
     const [styles, setStyles] = useState({display: 'none'});
     const [isDraggable, setDraggableState] = useState(false);
-    const [offsetParams, setOffsetParams] = useState(defaultOffset || 0);
+    const [offsetParams] = useState(defaultOffset || 0);
 
     function onMouseDownHandler(e) {
         e.preventDefault();
