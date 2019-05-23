@@ -7,7 +7,7 @@ import {act} from 'react-test-renderer';
 
 const store = configureStore();
 
-describe('Filter component testing', () => {
+describe('Widget component testing', () => {
     let container, component;
     let dataList = ['first', 'second'];
     beforeEach(() => {
