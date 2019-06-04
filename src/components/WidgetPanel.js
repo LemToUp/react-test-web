@@ -1,81 +1,50 @@
-import React, {useState, useEffect} from 'react';
-import '../styles/WidgetPanel.scss';
-import Filter from './Filter';
-import {connect} from 'react-redux';
-import {filtersDataActions} from '../actions/FilterData';
-
+"use strict";
+exports.__esModule = true;
+var react_1 = require("react");
+require("../styles/WidgetPanel.scss");
+var Filter_1 = require("./Filter");
+var react_redux_1 = require("react-redux");
+var FilterData_1 = require("../actions/FilterData");
 function WidgetPanel(props) {
-    const [isFilterShow, toggleFilter] = useState(false);
-    const [selectedFilters, setSelectedFilters] = useState(props.list || []);
-    const [forceUpdateVariable, forceUpdate] = useState(false);
-    const [initialFilterCoordinates, updateInitialFilterCoordinates] = useState({top: 0, left: 0});
-
-    useEffect(
-        () => {
-            props.dispatch(filtersDataActions.initFilterSection(`filter_${props.number}`)); //Bad decision to create filter section
-        },
-        [],
-    );
-
-    const onToggleFilter = (e) => {
+    var _a = react_1.useState(false), isFilterShow = _a[0], toggleFilter = _a[1];
+    var _b = react_1.useState(props.list || []), selectedFilters = _b[0], setSelectedFilters = _b[1];
+    var _c = react_1.useState(false), forceUpdateVariable = _c[0], forceUpdate = _c[1];
+    var _d = react_1.useState({ top: 0, left: 0 }), initialFilterCoordinates = _d[0], updateInitialFilterCoordinates = _d[1];
+    react_1.useEffect(function () {
+        props.dispatch(FilterData_1.filtersDataActions.initFilterSection("filter_" + props.number)); //Bad decision to create filter section
+    }, []);
+    var onToggleFilter = function (e) {
         e.stopPropagation();
         e.preventDefault();
         updateInitialFilterCoordinates({
-            top: `${e.clientY}px`,
-            left: `${e.clientX}px`,
+            top: e.clientY + "px",
+            left: e.clientX + "px"
         });
         toggleFilter(!isFilterShow);
     };
-
-    const onGetFilters = (data) => { //Get data from filter
+    var onGetFilters = function (data) {
         setSelectedFilters(data);
         forceUpdate(!forceUpdateVariable);
     };
-
-    const renderList = (data) => {
+    var renderList = function (data) {
         if (Array.isArray(data) && data.length > 0) {
-            return <ul className="list-group m-2 p-1">
-                {data.map((filterName, i) => (
-                        <li key={`sected_filters_${i}`} className="widget-row" id={`sected_filters_${i}`}>
-                            <p className="mb-0">{filterName}</p>
-                        </li>
-                    ),
-                )}
-            </ul>;
+            return react_1["default"].createElement("ul", { className: "list-group m-2 p-1" }, data.map(function (filterName, i) { return (react_1["default"].createElement("li", { key: "sected_filters_" + i, className: "widget-row", id: "sected_filters_" + i },
+                react_1["default"].createElement("p", { className: "mb-0" }, filterName))); }));
         }
     };
-
-    return (
-        <section className="Widget-panel col-md-4 mb-1 p-1">
-            <div className="row row align-items-start">
-                <div className="Widget-button col-md-4">
-                    <i className="material-icons btn-circle toggle-button" onClick={onToggleFilter}>
-                        {isFilterShow ? 'format_indent_decrease' : 'format_indent_increase'}
-                    </i>
-                </div>
-                <div className="Widget-list col-8">
-                    {renderList(selectedFilters)}
-                </div>
-
-                {isFilterShow ?
-                    <Filter
-                        closeEvent={onToggleFilter}
-                        onGetData={onGetFilters}
-                        name={`filter_${props.number}`}
-                        initialPosition={initialFilterCoordinates}
-                    /> : null}
-            </div>
-        </section>
-    );
+    return (react_1["default"].createElement("section", { className: "Widget-panel col-md-4 mb-1 p-1" },
+        react_1["default"].createElement("div", { className: "row row align-items-start" },
+            react_1["default"].createElement("div", { className: "Widget-button col-md-4" },
+                react_1["default"].createElement("i", { className: "material-icons btn-circle toggle-button", onClick: onToggleFilter }, isFilterShow ? 'format_indent_decrease' : 'format_indent_increase')),
+            react_1["default"].createElement("div", { className: "Widget-list col-8" }, renderList(selectedFilters)),
+            isFilterShow ?
+                react_1["default"].createElement(Filter_1["default"], { closeEvent: onToggleFilter, onGetData: onGetFilters, name: "filter_" + props.number, initialPosition: initialFilterCoordinates }) : null)));
 }
-
 function mapStateToProps(state) {
-    const {filters} = state.filters;
+    var filters = state.filters.filters;
     return {
-        filters,
+        filters: filters
     };
 }
-
-const ConnectedWidgetPanel = connect(mapStateToProps)(WidgetPanel);
-
-export default ConnectedWidgetPanel;
+var ConnectedWidgetPanel = react_redux_1.connect(mapStateToProps)(WidgetPanel);
+exports["default"] = ConnectedWidgetPanel;
