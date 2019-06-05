@@ -1,4 +1,4 @@
-import React, {useState, useEffect} from 'react';
+import React, {MouseEvent, useState, useEffect} from 'react';
 import '../styles/Filter.scss';
 import DropDownFilterSection from './DropDownFilterSection';
 import SearchFilterSection from './SearchFilterSection';
@@ -6,6 +6,7 @@ import ContentFilterSection from './ContentFilterSection';
 import {connect} from 'react-redux';
 import {filtersDataActions} from '../actions/FilterData';
 import {useDraggable} from '../hooks/Draggable';
+import {Dispatch} from "redux";
 
 export const dataTypes = {
     CONTEXT: 'CONTEXTS',
@@ -14,8 +15,30 @@ export const dataTypes = {
     SORT: 'SORT',
 };
 
-export function Filter(props) {
-    const onClose = (e) => {
+interface Props {
+    name: string,
+    closeEvent: any,
+    onGetData: any,
+    initialPosition: {x: number, y: number},
+    contexts: any[],
+    filterContexts: any[],
+    filterContextsChecks: number[],
+    filterDimentions: any[],
+    filterDimentionsChecks: number[],
+    filterFilters: any[],
+    filterFiltersChecks: number[],
+    setContextsChecks: any,
+    setDimentionsChecks: any,
+    setFiltersChecks: any,
+    sortRules: any[],
+    setSortRules: any,
+    setContexts: any,
+    setDimentions: any,
+    setFilters: any,
+}
+
+export function Filter(props: Props) {
+    const onClose = (e: MouseEvent) => {
         if (props.closeEvent) {
             props.closeEvent(e);
         }
@@ -57,30 +80,30 @@ export function Filter(props) {
         setIsDimentionsListDisplaying(!isDimentionsListDisplaying);
     };
 
-    const onGetContexts = (ids) => {
+    const onGetContexts = (ids: number[]) => {
         storeCheckedData(dataTypes.CONTEXT, ids);
     };
 
-    const onGetDimentions = (ids) => {
+    const onGetDimentions = (ids: number[]) => {
         storeCheckedData(dataTypes.DIMENTIONS, ids);
     };
 
-    const onGetFilters = (ids) => {
+    const onGetFilters = (ids: number[]) => {
         storeCheckedData(dataTypes.FILTERS, ids);
     };
 
-    const onGetSortRules = (filters) => {
+    const onGetSortRules = (filters: any) => {
         storeCheckedData(dataTypes.SORT, filters);
     };
 
-    const sendFiltersListToWidget = (filters, checks) => {
+    const sendFiltersListToWidget = (filters: any[], checks: number[]) => {
         if (props.onGetData && filters && checks) {
             const checkedFilters = filters.filter((filter => checks.indexOf(filter.id) !== -1)).map((filter) => filter.name);
             props.onGetData(checkedFilters);
         }
     };
 
-    const storeCheckedData = (type, data) => {
+    const storeCheckedData = (type: string, data: any[]) => {
         let filtersChecks = props.filterFiltersChecks;
         switch (type) {
             case dataTypes.CONTEXT:
@@ -111,7 +134,7 @@ export function Filter(props) {
         sendFiltersListToWidget(filters, filtersChecks);
     };
 
-    const storeFilterData = (type, data) => {
+    const storeFilterData = (type: string, data: any[]) => {
         switch (type) {
             case dataTypes.CONTEXT:
                 if (props.setContexts) {
@@ -132,13 +155,13 @@ export function Filter(props) {
         }
     };
 
-    const calculateFilteredDimentions = (dimentions = [], contextsChecks = []) => {
+    const calculateFilteredDimentions = (dimentions: any[] = [], contextsChecks: number[] = []) => {
         return dimentions.filter(dimention => {
             return contextsChecks.indexOf(dimention.section_id) !== -1;
         });
     };
 
-    const calculateFilteredFilters = (filters = [], dimentions = [], dimentionsChecks = []) => {
+    const calculateFilteredFilters = (filters: any[] = [], dimentions: any[] = [], dimentionsChecks: number[] = []) => {
         dimentionsChecks = dimentions
             .map(dimention => dimention.id)
             .filter(id => dimentionsChecks.indexOf(id) !== -1);
@@ -202,7 +225,7 @@ export function Filter(props) {
     );
 }
 
-const mapStateToProps = (state, ownProps) => {
+const mapStateToProps = (state: any, ownProps: Props) => {
     const {contexts} = state.filters;
     const {
         filterContexts,
@@ -225,15 +248,15 @@ const mapStateToProps = (state, ownProps) => {
     };
 };
 
-function mapDispatchToProps(dispatch, ownProps) {
+function mapDispatchToProps(dispatch: Dispatch, ownProps: Props) {
     return {
-        setContexts: (data) => dispatch(filtersDataActions.setContextsDataByFilter(ownProps.name, data)),
-        setContextsChecks: (checks) => dispatch(filtersDataActions.setContextsChecksByFilter(ownProps.name, checks)),
-        setDimentions: (data) => dispatch(filtersDataActions.setDimentionsDataByFilter(ownProps.name, data)),
-        setDimentionsChecks: (checks) => dispatch(filtersDataActions.setDimentionsChecksByFilter(ownProps.name, checks)),
-        setFilters: (data) => dispatch(filtersDataActions.setFiltersDataByFilter(ownProps.name, data)),
-        setFiltersChecks: (checks) => dispatch(filtersDataActions.setFiltersChecksByFilter(ownProps.name, checks)),
-        setSortRules: (filters) => dispatch(filtersDataActions.setSortRulesByFilter(ownProps.name, filters)),
+        setContexts: (data: any[]) => dispatch(filtersDataActions.setContextsDataByFilter(ownProps.name, data)),
+        setContextsChecks: (checks: number[]) => dispatch(filtersDataActions.setContextsChecksByFilter(ownProps.name, checks)),
+        setDimentions: (data: any[]) => dispatch(filtersDataActions.setDimentionsDataByFilter(ownProps.name, data)),
+        setDimentionsChecks: (checks: number[]) => dispatch(filtersDataActions.setDimentionsChecksByFilter(ownProps.name, checks)),
+        setFilters: (data: any[]) => dispatch(filtersDataActions.setFiltersDataByFilter(ownProps.name, data)),
+        setFiltersChecks: (checks: number[]) => dispatch(filtersDataActions.setFiltersChecksByFilter(ownProps.name, checks)),
+        setSortRules: (filters: any) => dispatch(filtersDataActions.setSortRulesByFilter(ownProps.name, filters)),
     };
 };
 

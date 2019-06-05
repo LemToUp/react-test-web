@@ -27,6 +27,8 @@
   ],
   "devDependencies": {
     "@types/react": "^16.8.19",
+    "@types/react-dom": "^16.8.4",
+    "@types/react-redux": "^7.0.9",
     "node-sass": "^4.11.0",
     "react-scripts": "^2.1.8",
     "react-test-renderer": "^16.8.6",

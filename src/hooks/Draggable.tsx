@@ -1,11 +1,11 @@
 import {useState, useEffect} from 'react';
 
-export function useDraggable(defaultStyle, defaultOffset) {
-    const [styles, setStyles] = useState({display: 'none'});
+export function useDraggable(defaultStyle: any, defaultOffset: number) {
+    const [styles, setStyles] = useState<any>({display: 'none'});
     const [isDraggable, setDraggableState] = useState(false);
     const [offsetParams] = useState(defaultOffset || 0);
 
-    function onMouseDownHandler(e) {
+    function onMouseDownHandler(e: MouseEvent) {
         e.preventDefault();
         if (!isDraggable) {
             setDraggableState(true);
@@ -31,7 +31,7 @@ export function useDraggable(defaultStyle, defaultOffset) {
         [],
     );
 
-    const onMouseMove = (e) => { //Dragging element over mouse
+    const onMouseMove = (e: MouseEvent) => { //Dragging element over mouse
         if (isDraggable) {
             setStyles({
                 top: `${e.clientY - offsetParams}px`,
@@ -41,7 +41,7 @@ export function useDraggable(defaultStyle, defaultOffset) {
         e.stopPropagation();
     };
 
-    const onMouseUp = (e) => { //Disable dragging
+    const onMouseUp = (e: MouseEvent) => { //Disable dragging
         if (isDraggable) {
             setDraggableState(false);
         }

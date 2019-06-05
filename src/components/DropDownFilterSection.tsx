@@ -1,15 +1,21 @@
-import React, {useState} from 'react';
+import React, {MouseEvent, ChangeEvent, useState} from 'react';
 import '../styles/DropDownFilterSection.scss';
-import {useChecksInputHandler} from '../hooks/ChecksInputHandler';
+import {ChecksInputPropsInterface, useChecksInputHandler} from '../hooks/ChecksInputHandler';
 
-function DropDownFilterSection(props) {
+interface Props extends ChecksInputPropsInterface {
+    title: string,
+    isDisplaying: boolean,
+    onToggleList: any,
+}
+
+function DropDownFilterSection(props: Props) {
 
     const key = props.key || 'id';
     const value = props.value || 'name';
     const [changeData, checkedDataString] = useChecksInputHandler(props);
     const [uniqueName] = useState((props.name || `unique_${Math.random()}`));
 
-    const toggleDropDown = (e) => {
+    const toggleDropDown = (e: MouseEvent) => {
         e.stopPropagation();
         if (props.isDisplaying && props.onSendCheckedData) {
             props.onSendCheckedData(props.checks);
@@ -19,15 +25,15 @@ function DropDownFilterSection(props) {
         }
     };
 
-    const hasDataValue = (value) => { //Set check or not to set check
+    const hasDataValue = (value: number) => { //Set check or not to set check
         return props.checks.indexOf(value) !== -1;
     };
 
-    const onChangeData = function (e) {
+    const onChangeData = function (e: ChangeEvent) {
         changeData(props, e);
     };
 
-    const renderList = (data) => {
+    const renderList = (data: any[]) => {
         if (Array.isArray(data) && data.length > 0) {
             return <ul className="list-group pr-5">
                 {data.map((item) => (

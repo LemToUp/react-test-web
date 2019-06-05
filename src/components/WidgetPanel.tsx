@@ -1,14 +1,21 @@
-import React, {useState, useEffect} from 'react';
+import React, {useState, useEffect, ChangeEvent, MouseEvent} from 'react';
 import '../styles/WidgetPanel.scss';
 import Filter from './Filter';
 import {connect} from 'react-redux';
 import {filtersDataActions} from '../actions/FilterData';
+import {Dispatch} from "redux";
 
-function WidgetPanel(props) {
+interface Props {
+    list: string[],
+    dispatch: Dispatch,
+    number: number,
+}
+
+function WidgetPanel(props: Props) {
     const [isFilterShow, toggleFilter] = useState(false);
     const [selectedFilters, setSelectedFilters] = useState(props.list || []);
     const [forceUpdateVariable, forceUpdate] = useState(false);
-    const [initialFilterCoordinates, updateInitialFilterCoordinates] = useState({top: 0, left: 0});
+    const [initialFilterCoordinates, updateInitialFilterCoordinates] = useState<any>({top: 0, left: 0});
 
     useEffect(
         () => {
@@ -17,22 +24,29 @@ function WidgetPanel(props) {
         [],
     );
 
-    const onToggleFilter = (e) => {
+    const onCloseFilter = (e: ChangeEvent) => {
+        e.stopPropagation();
+        toggleFilter(false);
+    };
+
+    const onToggleFilter = (e: MouseEvent) => {
         e.stopPropagation();
         e.preventDefault();
-        updateInitialFilterCoordinates({
-            top: `${e.clientY}px`,
-            left: `${e.clientX}px`,
-        });
+        if (e.clientY && e.clientX) {
+            updateInitialFilterCoordinates({
+                top: `${e.clientY}px`,
+                left: `${e.clientX}px`,
+            });
+        }
         toggleFilter(!isFilterShow);
     };
 
-    const onGetFilters = (data) => { //Get data from filter
+    const onGetFilters = (data: string[]) => { //Get data from filter
         setSelectedFilters(data);
         forceUpdate(!forceUpdateVariable);
     };
 
-    const renderList = (data) => {
+    const renderList = (data: string[]) => {
         if (Array.isArray(data) && data.length > 0) {
             return <ul className="list-group m-2 p-1">
                 {data.map((filterName, i) => (
@@ -59,7 +73,7 @@ function WidgetPanel(props) {
 
                 {isFilterShow ?
                     <Filter
-                        closeEvent={onToggleFilter}
+                        closeEvent={onCloseFilter}
                         onGetData={onGetFilters}
                         name={`filter_${props.number}`}
                         initialPosition={initialFilterCoordinates}
@@ -69,7 +83,7 @@ function WidgetPanel(props) {
     );
 }
 
-function mapStateToProps(state) {
+function mapStateToProps(state: any) {
     const {filters} = state.filters;
     return {
         filters,

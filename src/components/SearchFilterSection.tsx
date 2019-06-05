@@ -1,4 +1,4 @@
-import React, {useState, useEffect} from 'react';
+import React, {useState, useEffect, MouseEvent, ChangeEvent, KeyboardEvent} from 'react';
 import '../styles/SearchFilterSection.scss';
 import {seachFilterConstants, orderFilterConstants} from '../constants/Filters'
 
@@ -9,7 +9,13 @@ const defaultSortDataValue = {
     unique: 'name',
 };
 
-function DropDownFilterSection(props) {
+interface Props {
+    className: string,
+    onSendData: any,
+    sortData: any,
+}
+
+function DropDownFilterSection(props: Props) {
 
     const [isShowPopup, setIsShowPopup] = useState(false);
     const [searchPhrase, setSearchPhrase] = useState('');
@@ -24,52 +30,52 @@ function DropDownFilterSection(props) {
         [],
     );
 
-    const toggleIsShowPopup = (e) => {
+    const toggleIsShowPopup = (e: MouseEvent) => {
         e.stopPropagation();
         setIsShowPopup(!isShowPopup);
     };
 
-    const changeCurrentFilter = (filterName, e) => {
+    const changeCurrentFilter = (filterName: string, e: MouseEvent) => {
         e.stopPropagation();
         sendFiltersToParent({searchType: filterName});
         setIsShowPopup(!isShowPopup);
     };
 
-    const onToggleCompareFullFilter = (e) => {
+    const onToggleCompareFullFilter = (e: MouseEvent) => {
         changeCurrentFilter(seachFilterConstants.SEARCH_FILTER_COMPARE_FULL, e);
     };
 
-    const onToggleCompareParticalFilter = (e) => {
+    const onToggleCompareParticalFilter = (e: MouseEvent) => {
         changeCurrentFilter(seachFilterConstants.SEARCH_FILTER_COMPARE_PARTICAL, e);
     };
 
-    const onToggleBegginingFromFilter = (e) => {
+    const onToggleBegginingFromFilter = (e: MouseEvent) => {
         changeCurrentFilter(seachFilterConstants.SEARCH_FILTER_COMPARE_BEGINNING_FROM, e);
     };
 
-    const sendFiltersToParent = (filters) => {
+    const sendFiltersToParent = (filters: any) => {
         if (props.onSendData && props.sortData) {
             props.onSendData({...props.sortData, ...filters});
         }
     };
 
-    const onChangeSearchPhrase = (e) => {
+    const onChangeSearchPhrase = (e: ChangeEvent<HTMLInputElement>) => {
         e.stopPropagation();
         setSearchPhrase(e.target.value);
     };
 
-    const onOrderToggle = (e) => {
+    const onOrderToggle = (e: MouseEvent) => {
         e.stopPropagation();
         sendFiltersToParent({sort: props.sortData.sort ? undefined : orderFilterConstants.ORDER_FILTER_ALPHABETICAL_UP});
         forceUpdate(!forceUpdateVariable);
     };
 
-    const onSendSearchPhrase = (e) => {
+    const onSendSearchPhrase = (e: MouseEvent) => {
         e.stopPropagation();
         sendFiltersToParent({search: searchPhrase});
     };
 
-    const onInputKeyUp = (e) => {
+    const onInputKeyUp = (e: KeyboardEvent) => {
         e.stopPropagation();
         if (e.key === 'Enter') {
             sendFiltersToParent({search: searchPhrase});
