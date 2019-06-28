@@ -1,3 +1,5 @@
+## Project for testing a new hooks principles
+
 This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
 
 ## Available Scripts
